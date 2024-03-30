@@ -11,7 +11,9 @@
 ## Time responsável pelo repositório
 <table align="center">
   <tr>
-    <td align="center"><a href="https://github.com/Davi-Hilario"><img style="border-radius: 50%;" src="https://avatars.githubusercontent.com/u/125586338?v=4" width="100px;" alt=""/><br /><sub><b>Davi Alexandre de Souza Hilário</b></a><br /><a href="#" >Desenvolvedor Backend e DBA</a></td>
+     <td align="center"><a href="https://github.com/AmandaCupolaa"><img style="border-radius: 50%;" src="https://avatars.githubusercontent.com/u/125586676?v=4" width="100px;" alt=""/><br /><sub><b>Amanda Cupola</b></sub></a><br /></td>
+    <td align="center"><a href="https://github.com/danielandrade108"><img style="border-radius: 50%;" src="https://avatars.githubusercontent.com/u/125586786?v=4" width="100px;" alt=""/><br /><sub><b>Daniel Andrade</b></sub></a><br /></td>
+    <td align="center"><a href="https://github.com/Davi-Hilario"><img style="border-radius: 50%;" src="https://avatars.githubusercontent.com/u/125586338?v=4" width="100px;" alt=""/><br /><sub><b>Davi Alexandre de Souza Hilário</b></a><br /></td>
   </tr>
 </table>
 
@@ -25,7 +27,7 @@
 <table align="center">
   <tr> 
     <td>Criação de Tabelas</td>
-    <td>A criação das tabelas deve sempre incluir a cláusula "IF NOT EXISTS" para checar se a tabela existe. Além disso, todas o nome das tabelas sempre deve     começar com "tb", seguido pelo restante do nome da tabela, utilizando do padrão snake case.</td>
+    <td>A criação das tabelas deve sempre incluir a cláusula "IF NOT EXISTS" para checar se a tabela existe. Além disso, todas o nome das tabelas sempre deve começar com "tb", seguido pelo restante do nome da tabela, utilizando do padrão snake case.</td>
   </tr>
 </table>
 
@@ -40,36 +42,33 @@
 <table align="center">
   <tr> 
     <td>Definição dos Atributos</td>
-    <td>Os atributos devem sempre possui o nome da tabela correspondente no final (desconsiderando o "tb"), seguindo também o padrão snake case para a devida     nomenclatura.</td>
+    <td>Atributos com nome composto devem seguir o padrão snake_case para serem definidos.</td>
   </tr>
 </table>
 
 ```sql
       CREATE TABLE IF NOT EXISTS tb_exemplo_tabela
       (
-          id_exemplo_tabela INT PRIMARY KEY AUTO_INCREMENT,
-          nome_exemplo_tabela VARCHAR(60),
-          data_nasc_exemplo_tabela DATE
+          id INT PRIMARY KEY AUTO_INCREMENT,
+          nome VARCHAR(60),
+          data_nasc DATE
       );
 ```
-
-> [!NOTE]
-> Essa regra de nomenclatura não se aplica para atributos considerados como Foreign Key
 <br>
 
 <table align="center">
   <tr> 
     <td>Atributos Foreign Key</td>
-    <td>Atributos do tipo Chave Estrangeira seguem o padrão de snake case, porém o último nome do atributo deve fazer referência a sua tabela original e          começar com "fk"</td>
+    <td>Atributos do tipo Chave Estrangeira devem sempre começar com "fk" e seguir o padrão de snake case. O último nome do atributo deve fazer referência a sua tabela original.</td>
   </tr>
 </table>
 
 ```sql
       CREATE TABLE IF NOT EXISTS tb_exemplo_tabela
       (
-          id_exemplo_tabela INT PRIMARY KEY AUTO_INCREMENT,
-          nome_exemplo_tabela VARCHAR(60),
-          data_nasc_exemplo_tabela DATE,
+          id INT PRIMARY KEY AUTO_INCREMENT,
+          nome VARCHAR(60),
+          data_nasc DATE,
           fk_outra_tabela INT,
           FOREIGN KEY(fk_outra_tabela) REFERENCES tb_outra_tabela(id_outra_tabela) 
       );
