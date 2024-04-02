@@ -39,7 +39,7 @@ select * from tb_produto;
 create table if not exists tb_imagem_produto
 (
 	id_imagem_produto int primary key auto_increment,
-    nome_produto varchar(100),
+    nome_imagem varchar(100),
     codigo_imagem blob,
     fk_produto int,
     foreign key(fk_produto) references tb_produto(id_produto)
