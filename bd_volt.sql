@@ -28,9 +28,23 @@ create table if not exists tb_produto
 (
 	id_produto int primary key auto_increment,
     nome_produto varchar(80),
-    desc_produto varchar(300)
+    desc_produto varchar(300),
+    categ_produto varchar(100),
+    preco_produto decimal(8,2),
+    qnt_estoque int
 );
 select * from tb_produto;
+
+-- Imagem produto
+create table if not exists tb_imagem_produto
+(
+	id_imagem_produto int primary key auto_increment,
+    nome_produto varchar(100),
+    codigo_imagem blob,
+    fk_produto int,
+    foreign key(fk_produto) references tb_produto(id_produto)
+);
+select * from tb_imagem_produto	;
 
 -- Login
 create table if not exists tb_login
@@ -43,35 +57,38 @@ create table if not exists tb_login
 ); 
 select * from tb_login;
 
--- Chamado
-create table if not exists tb_chamado
+-- Clique produto
+create table if not exists tb_click_produto
 (
-	id_chamado int primary key auto_increment,
-    titulo_chamado varchar(60),
-    mensagem_chamado varchar(150),
-    data_hora_chamado datetime,
-    fk_solicitante int,
-    fk_produto int,
-    foreign key(fk_solicitante) references tb_usuario(id_usuario),
+	id_click_produto int primary key auto_increment,
+    data_hora_click datetime,
+    possivel_compra binary,
+	fk_usuario int,
+    foreign key(fk_usuario) references tb_usuario(id_usuario),
+	fk_produto int,
     foreign key(fk_produto) references tb_produto(id_produto)
 );
-select * from tb_chamado;
+select * from tb_click_produto;
 
--- Procedimento
-create table if not exists tb_procedimento
+-- Tag produto
+create table if not exists tb_tag_produto
 (
-	id_procedimento int primary key auto_increment,
-    valor_procedimento decimal(8,2),
-    tipo_procedimento tinyint check(tipo_procedimento in (0,1,2)),
-    data_hora_procedimento datetime,
-    fk_chamado int, 
-    fk_destinatario int,
-    fk_solicitante int,
-    foreign key(fk_chamado) references tb_chamado(id_chamado),
-    foreign key(fk_destinatario) references tb_usuario(id_usuario),
-    foreign key(fk_solicitante) references tb_usuario(id_usuario)
+	id_tag_produto int primary key auto_increment,
+    tag_produto varchar(50)
 );
-select * from tb_procedimento;
+select * from tb_tag_produto;
+
+-- Classificação produto
+create table if not exists tb_classificacao_produto
+(
+	id_classificacao_produto int primary key auto_increment,
+    fk_produto int,
+    foreign key(fk_produto) references tb_produto(id_produto),
+    fk_tag_produto int,
+    foreign key(fk_tag_produto) references tb_tag_produto(id_tag_produto)
+);
+select * from tb_classificacao_produto;
+
 
 -- Views --------------------------------------------------------------
 -- Procedures ---------------------------------------------------------
