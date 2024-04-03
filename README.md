@@ -125,7 +125,7 @@
       <th>Descrição</th>
     </tr>
     <tr>
-      <td>id_</td>
+      <td>id</td>
       <td>INT</td>
       <td>-</td>
       <td>PRIMARY KEY, AUTO_INCREMENT</td>
@@ -239,7 +239,7 @@
     </tr>
     <tr>
       <th colspan="2">Tabelas Relacionadas</th>
-      <td colspan="3">tb_click_produto, tb_classificação_produto, tb_imagem_produto</td>
+      <td colspan="3">tb_click_produto, tb_classificacao_produto, tb_imagem_produto</td>
     </tr>
   </thead>
   <tbody>
