@@ -199,7 +199,7 @@
       <td>CHAR</td>
       <td>36</td>
       <td>PRIMARY KEY</td>
-      <td>ID </td>
+      <td>UUID gerado automaticamente pelo sistema.</td>
     </tr>
     <tr>
       <td>email</td>
@@ -291,6 +291,13 @@
       <td>-</td>
       <td>-</td>
       <td>Quantidade desse produto no estoque. Não pode ser menor que 0.</td>
+    </tr>
+    <tr>
+      <td>estado_geral</td>
+      <td>VARCHAR</td>
+      <td>45</td>
+      <td>-</td>
+      <td>O estado desse produto (outlet, bom, muito bom, excelente).</td>
     </tr>
   </tbody>
 </table>
@@ -396,7 +403,6 @@
 </table>
 <br>
 
-
 <h3>• Tabela Classificao Produto</h3>
 <p>Tabela associativa entre as tabelas {tb_produto} e {tb_tag_produto}</p>
 
@@ -446,5 +452,102 @@
 </table>
 <br>
 
+<h3>• Tabela Favoritos</h3>
+<p>Tabela em que o usuário terá acesso ao produtos marcados como favoritos.</p>
+
+<table align="center">
+  <thead>
+    <tr>
+      <th colspan="5">Nome da Tabela</th>
+    </tr>
+    <tr>
+      <th colspan="5">tb_favoritos</th>
+    </tr>
+    <tr>
+      <th colspan="2">Tabelas Relacionadas</th>
+      <td colspan="3">tb_usuario, tb_lista_favoritos</td>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Campo</th>
+      <th>Tipo</th>
+      <th>Tamanho</th>
+      <th>Extra</th>
+      <th>Descrição</th>
+    </tr>
+    <tr>
+      <td>id</td>
+      <td>INT</td>
+      <td>-</td>
+      <td>PRIMARY KEY, AUTO_INCREMENT</td>
+      <td>ID numérico auto incrementavel</td>
+    </tr>
+    <tr>
+      <td>fk_usuario</td>
+      <td>INT</td>
+      <td>-</td>
+      <td>FOREIGN KEY</td>
+      <td>Chave estrangeira referenciando o campo {id} da tabela {tb_usuario}</td>
+    </tr>
+  </tbody>
+</table>
+<br>
+
+<h3>• Tabela Lista Favoritos</h3>
+<p>Tabela associativa entre as tabelas {tb_produto} e {tb_favoritos}.</p>
+
+<table align="center">
+  <thead>
+    <tr>
+      <th colspan="5">Nome da Tabela</th>
+    </tr>
+    <tr>
+      <th colspan="5">tb_lista_favoritos</th>
+    </tr>
+    <tr>
+      <th colspan="2">Tabelas Relacionadas</th>
+      <td colspan="3">tb_produto, tb_lista_favoritos</td>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Campo</th>
+      <th>Tipo</th>
+      <th>Tamanho</th>
+      <th>Extra</th>
+      <th>Descrição</th>
+    </tr>
+    <tr>
+      <td>id</td>
+      <td>INT</td>
+      <td>-</td>
+      <td>PRIMARY KEY, AUTO_INCREMENT</td>
+      <td>ID numérico auto incrementavel</td>
+    </tr>
+    <tr>
+      <td>fk_favoritos</td>
+      <td>INT</td>
+      <td>-</td>
+      <td>FOREIGN KEY</td>
+      <td>Chave estrangeira referenciando o campo {id} da tabela {tb_favoritos}</td>
+    </tr>
+    <tr>
+      <td>fk_produto</td>
+      <td>INT</td>
+      <td>-</td>
+      <td>FOREIGN KEY</td>
+      <td>Chave estrangeira referenciando o campo {id} da tabela {tb_produto}</td>
+    </tr>
+    <tr>
+      <td>dt_hora_insercao</td>
+      <td>DATETIME</td>
+      <td>-</td>
+      <td>FOREIGN KEY</td>
+      <td>Data e hora em que um produto foi inserido na lista de favoritos do usuário</td>
+    </tr>
+  </tbody>
+</table>
+<br>
 
 <h2>🚧 Em Construção 🚧</h2>
