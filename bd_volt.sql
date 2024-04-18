@@ -23,7 +23,8 @@ create table if not exists tb_produto
 	categoria varchar(100) not null,
 	preco decimal(8,2) not null,
 	qtd_estoque int,
-    estado_geral varchar(45) not null
+    estado_geral varchar(45) not null,
+    desconto int
 );
 
 -- Imagem produto
@@ -122,17 +123,17 @@ INSERT INTO tb_login (id, email, senha, fk_usuario) VALUES
 (UUID(), 'marcos@example.com', 'senha282930', 10);
 
 -- Inserts para tabela tb_produto
-INSERT INTO tb_produto (nome, descricao, categoria, preco, qtd_estoque, estado_geral) VALUES
-('Notebook Dell', 'Notebook Dell Inspiron 15', 'Computador', 2500.00, 10, "Novo"),
-('Smartphone Samsung', 'Smartphone Samsung Galaxy S21', 'Celular', 1800.00, 15, "Semi novo"),
-('Teclado mecânico', 'Teclado mecânico para jogos', 'Acessório', 150.00, 20, "Novo"),
-('Mouse gamer', 'Mouse gamer com sensor óptico', 'Acessório', 80.00, 30, "Semi novo"),
-('Monitor LG', 'Monitor LG UltraWide 29', 'Acessório', 600.00, 5, "Novo"),
-('iPhone 13', 'Smartphone Apple iPhone 13', 'Celular', 2000.00, 12, "Novo"),
-('Headset Bluetooth', 'Headset Bluetooth JBL', 'Acessório', 120.00, 25, "Semi novo"),
-('Tablet Samsung', 'Tablet Samsung Galaxy Tab A7', 'Acessório', 400.00, 18, "Semi novo"),
-('Câmera Canon', 'Câmera digital Canon EOS Rebel T7', 'Acessório', 700.00, 8, "Novo"),
-('Notebook HP', 'Notebook HP Pavilion 14', 'Computador', 1800.00, 10, "Semi novo");
+INSERT INTO tb_produto (nome, descricao, categoria, preco, qtd_estoque, estado_geral, desconto) VALUES
+('Notebook Dell', 'Notebook Dell Inspiron 15', 'Computador', 2500.00, 10, "Novo", 15),
+('Smartphone Samsung', 'Smartphone Samsung Galaxy S21', 'Celular', 1800.00, 15, "Semi novo", 4),
+('Teclado mecânico', 'Teclado mecânico para jogos', 'Acessório', 150.00, 20, "Novo", 0),
+('Mouse gamer', 'Mouse gamer com sensor óptico', 'Acessório', 80.00, 30, "Semi novo", 0),
+('Monitor LG', 'Monitor LG UltraWide 29', 'Acessório', 600.00, 5, "Novo", 10),
+('iPhone 13', 'Smartphone Apple iPhone 13', 'Celular', 2000.00, 12, "Novo", 7),
+('Headset Bluetooth', 'Headset Bluetooth JBL', 'Acessório', 120.00, 25, "Semi novo", 10),
+('Tablet Samsung', 'Tablet Samsung Galaxy Tab A7', 'Acessório', 400.00, 18, "Semi novo", 2),
+('Câmera Canon', 'Câmera digital Canon EOS Rebel T7', 'Acessório', 700.00, 8, "Novo", 12),
+('Notebook HP', 'Notebook HP Pavilion 14', 'Computador', 1800.00, 10, "Semi novo", 5);
 
 -- Inserts para tabela tb_imagem_produto
 INSERT INTO tb_imagem_produto (nome, codigo_imagem, fk_produto) VALUES
