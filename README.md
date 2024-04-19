@@ -299,6 +299,13 @@
       <td>-</td>
       <td>O estado desse produto (outlet, bom, muito bom, excelente).</td>
     </tr>
+      <tr>
+      <td>desconto</td>
+      <td>INT</td>
+      <td>-</td>
+      <td>-</td>
+      <td>O quanto de desconto o produto tem.</td>
+    </tr>
   </tbody>
 </table>
 <br>
