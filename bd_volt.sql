@@ -42,7 +42,7 @@ create table if not exists tb_login
 (
 	id VARCHAR(36) primary key,
 	email varchar(255) unique,
-	senha varchar(16) not null unique,
+	senha varchar(255) not null unique,
 	fk_usuario int,
 	foreign key(fk_usuario) references tb_usuario(id)
 ); 
@@ -111,16 +111,16 @@ INSERT INTO tb_usuario (nome, email, telefone, categoria) VALUES
 
 -- Inserts para tabela tb_login
 INSERT INTO tb_login (id, email, senha, fk_usuario) VALUES
-(UUID(), 'joao@example.com', 'senha123', 1),
-(UUID(), 'maria@example.com', 'senha456', 2),
-(UUID(), 'pedro@example.com', 'senha789', 3),
-(UUID(), 'ana@example.com', 'senha101112', 4),
-(UUID(), 'lucas@example.com', 'senha131415', 5),
-(UUID(), 'fernanda@example.com', 'senha161718', 6),
-(UUID(), 'gabriel@example.com', 'senha192021', 7),
-(UUID(), 'laura@example.com', 'senha222324', 8),
-(UUID(), 'rafaela@example.com', 'senha252627', 9),
-(UUID(), 'marcos@example.com', 'senha282930', 10);
+(UUID(), 'joao@example.com', '9aG?&Ld3G6!1Qr@JvP#Yw*2Nz$oiXsU%KjTmW?LX!7qpI&G8Q@v8V2bPdW^G9H)DrU1TxJ6X9PlN^7MC?vYzMwzIx1yT)g', 1),
+(UUID(), 'maria@example.com', 'K@tT5D#0M3Ozg7JkR@lS!vL6!9W$ip1Xf*N%Iu4Z7bY9GvE2nQhDdA@#y^qHxJpXsT&oC9VlE7R3PfZ&kN5W3U4^e6jR', 2),
+(UUID(), 'pedro@example.com', '6S2vE^Qh4T3r@j8LsF&ZnR1$M9oH%iY!u6A*p5N2xP@dG7XcL1y#DkZ8R6gJ?5TmWfUjX3pV7K^oA4qYtW!ePbC2lH7nR', 3),
+(UUID(), 'ana@example.com', 'H6yP%4^L9nO?0s&X!gM#7NzA$5KlV3vF9WjG*p@eBcZdR2T1J?tQrD&3kU&YwI5uS2m^A@x6QlE8Cn7XzG4fV^J1oP@6', 4),
+(UUID(), 'lucas@example.com', 'L^uV4y#Z1fB$eWpM&2N3T9G0vJb@kR^PcS6DlK5s7Q@xOaH?rY%9wI2nA8dFtX!gU&iE1mJ3qC7^oG6Xz#h^9Q*8^pNt', 5),
+(UUID(), 'fernanda@example.com', 'R2YqN8Dl5ZpU@e7!mXc9L^w?IvJjEiK%zHd?Q6rPnB5oGyMf@W^sA3T7V#1S!4O&t0^g^2K6k$uP*1H8Cx3Ql@9@b4^h', 6),
+(UUID(), 'gabriel@example.com', 'PnLrS5U4I#q%z2dF1jT&vX3h@*g^WcO9VxJ?lNw^6oKpA8s^Q0e7R6^MmBkE#y1@G9YtD2^f^Zi3b$7#u@H@4^9G8c^a', 7),
+(UUID(), 'laura@example.com', '9N!wD4gA%3ZoT&f@j@qY7H#8Kc^sXr1^M*e?V0L?J@I2vEzB5y@tPd^u6Q@G^l$S^pO6x2W8i3bF1r^7n^h#Km6U9C', 8),
+(UUID(), 'rafaela@example.com', 'B6A9T3x^4N*oQz#7&f$KlRt1M8WuJpV@Dc^w?I2q@5Xn7e$S6!i^HvGjZr#Ld%yP0^sY^E8g^3mFk@U2#V4^9b1@o^h', 9),
+(UUID(), 'marcos@example.com', '8UfT4^N1mDv6gBzJ&Y?E@wX9x0#H5?iR$G^lW2n@qL#rA!PpS7^K*6^yMjO3t%ZcQ&dV^uI7s3#^oC9b@4h2^G8^e@k', 10);
 
 -- Inserts para tabela tb_produto
 INSERT INTO tb_produto (nome, descricao, categoria, preco, qtd_estoque, estado_geral, desconto) VALUES
