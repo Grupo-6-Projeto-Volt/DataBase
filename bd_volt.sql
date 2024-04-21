@@ -35,6 +35,7 @@ create table if not exists tb_imagem_produto
 	codigo_imagem blob,
 	fk_produto int,
 	foreign key(fk_produto) references tb_produto(id)
+    on delete cascade
 );
 
 -- Login
@@ -57,6 +58,7 @@ create table if not exists tb_click_produto
 	foreign key(fk_usuario) references tb_usuario(id),
 	fk_produto int,
 	foreign key(fk_produto) references tb_produto(id)
+    on delete cascade
 );
 
 -- Tag produto
@@ -91,6 +93,7 @@ create table if not exists tb_lista_favoritos
     foreign key(fk_favoritos) references tb_favoritos(id),
 	fk_produto int,
     foreign key(fk_produto) references tb_produto(id)
+    on delete cascade
 );
 
 
