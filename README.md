@@ -211,7 +211,7 @@
     <tr>
       <td>senha_login</td>
       <td>VARCHAR</td>
-      <td>16</td>
+      <td>255</td>
       <td>NOT NULL, UNIQUE</td>
       <td>Senha do usuário. Deve ter no mínimo 8 caracteres e no máximo 16.</td>
     </tr>
