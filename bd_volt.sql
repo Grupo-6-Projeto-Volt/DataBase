@@ -76,6 +76,7 @@ create table if not exists tb_classificacao_produto
 	foreign key(fk_tag_produto) references tb_tag_produto(id),
 	fk_produto int,
 	foreign key(fk_produto) references tb_produto(id)
+    on delete cascade
 );
 
 create table if not exists tb_favoritos
