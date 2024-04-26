@@ -410,7 +410,7 @@
 </table>
 <br>
 
-<h3>• Tabela Classificao Produto</h3>
+<h3>• Tabela Classificação Produto</h3>
 <p>Tabela associativa entre as tabelas {tb_produto} e {tb_tag_produto}</p>
 
 <table align="center">
@@ -550,8 +550,141 @@
       <td>dt_hora_insercao</td>
       <td>DATETIME</td>
       <td>-</td>
-      <td>FOREIGN KEY</td>
+      <td>-</td>
       <td>Data e hora em que um produto foi inserido na lista de favoritos do usuário</td>
+    </tr>
+  </tbody>
+</table>
+<br>
+
+<h3>• Tabela Click Produto</h3>
+<p>Tabela associativa entre as tabelas {tb_produto} e {tb_usuario}.</p>
+
+<table align="center">
+  <thead>
+    <tr>
+      <th colspan="5">Nome da Tabela</th>
+    </tr>
+    <tr>
+      <th colspan="5">tb_click_produto</th>
+    </tr>
+    <tr>
+      <th colspan="2">Tabelas Relacionadas</th>
+      <td colspan="3">tb_produto, tb_usuario</td>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Campo</th>
+      <th>Tipo</th>
+      <th>Tamanho</th>
+      <th>Extra</th>
+      <th>Descrição</th>
+    </tr>
+    <tr>
+      <td>id</td>
+      <td>INT</td>
+      <td>-</td>
+      <td>PRIMARY KEY, AUTO_INCREMENT</td>
+      <td>ID numérico auto incrementavel</td>
+    </tr>
+    <tr>
+      <td>fk_produto</td>
+      <td>INT</td>
+      <td>-</td>
+      <td>FOREIGN KEY</td>
+      <td>Chave estrangeira referenciando o campo {id} da tabela {tb_produto}</td>
+    </tr>
+    <tr>
+      <td>fk_usuario</td>
+      <td>INT</td>
+      <td>-</td>
+      <td>FOREIGN KEY</td>
+      <td>Chave estrangeira referenciando o campo {id} da tabela {tb_usuario}</td>
+    </tr>
+    <tr>
+      <td>dt_hora_click</td>
+      <td>DATETIME</td>
+      <td>-</td>
+      <td>-</td>
+      <td>Data e hora em que algum usuário do sistema clicou em algum produto</td>
+    </tr>
+    <tr>
+      <td>possivel_compra</td>
+      <td>TINYINT</td>
+      <td>1</td>
+      <td></td>
+      <td>Informa se houve uma possível compra</td>
+    </tr>
+  </tbody>
+</table>
+<br>
+
+<h3>• Tabela Produto Chamado</h3>
+<p>Tabela associativa entre as tabelas {tb_produto} e {tb_usuario}.</p>
+
+<table align="center">
+  <thead>
+    <tr>
+      <th colspan="5">Nome da Tabela</th>
+    </tr>
+    <tr>
+      <th colspan="5">tb_produto_chamado</th>
+    </tr>
+    <tr>
+      <th colspan="2">Tabelas Relacionadas</th>
+      <td colspan="3">tb_produto, tb_usuario</td>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Campo</th>
+      <th>Tipo</th>
+      <th>Tamanho</th>
+      <th>Extra</th>
+      <th>Descrição</th>
+    </tr>
+    <tr>
+      <td>id</td>
+      <td>INT</td>
+      <td>-</td>
+      <td>PRIMARY KEY, AUTO_INCREMENT</td>
+      <td>ID numérico auto incrementavel</td>
+    </tr>
+    <tr>
+      <td>fk_produto</td>
+      <td>INT</td>
+      <td>-</td>
+      <td>FOREIGN KEY</td>
+      <td>Chave estrangeira referenciando o campo {id} da tabela {tb_produto}</td>
+    </tr>
+    <tr>
+      <td>fk_usuario</td>
+      <td>INT</td>
+      <td>-</td>
+      <td>FOREIGN KEY</td>
+      <td>Chave estrangeira referenciando o campo {id} da tabela {tb_usuario}</td>
+    </tr>
+    <tr>
+      <td>status_chamado</td>
+      <td>TINYINT</td>
+      <td>1</td>
+      <td>NOT NULL</td>
+      <td>Status atual do chamado: 0 = Em andamento; 1 = Cancelado; 2 = Finalizado</td>
+    </tr>
+    <tr>
+      <td>dt_hora_abertura</td>
+      <td>DATETIME</td>
+      <td>-</td>
+      <td>NOT NULL</td>
+      <td>Data e hora em que o chamado foi aberto</td>
+    </tr>
+    <tr>
+      <td>dt_hora_fechamento</td>
+      <td>DATETIME</td>
+      <td>-</td>
+      <td>-</td>
+      <td>Data e hora em que  o chamado foi fechado</td>
     </tr>
   </tbody>
 </table>

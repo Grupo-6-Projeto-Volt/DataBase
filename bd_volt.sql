@@ -97,6 +97,18 @@ create table if not exists tb_lista_favoritos
     on delete cascade
 );
 
+create table if not exists tb_produto_chamado
+(
+	id int primary key auto_increment,
+    status_chamado tinyint(1) not null,
+    data_hora_abertura datetime not null,
+    data_hora_fechamento datetime,
+	fk_usuario int,
+	foreign key(fk_usuario) references tb_usuario(id),
+	fk_produto int,
+	foreign key(fk_produto) references tb_produto(id)
+    on delete cascade
+);
 
 -- Inserts ------------------------------------------------------------
 
@@ -196,6 +208,7 @@ INSERT INTO tb_classificacao_produto (fk_produto, fk_tag_produto) VALUES
 (9, 4), -- Câmera Canon é uma promoção
 (10, 5); -- Notebook HP é uma novidade
 
+-- Inserts para tabela tb_favoritos
 INSERT INTO tb_favoritos (fk_usuario) VALUES 
 (1), 
 (3), 
@@ -208,6 +221,7 @@ INSERT INTO tb_favoritos (fk_usuario) VALUES
 (8), 
 (10);
 
+-- Inserts para tabela tb_lista_favoritos
 INSERT INTO tb_lista_favoritos (dt_hora_insercao, fk_favoritos, fk_produto) VALUES
 ('2024-04-12 08:00:00', 1, 2), -- Favorito 1, Produto 2
 ('2024-04-12 08:10:00', 2, 4), -- Favorito 3, Produto 4
@@ -220,6 +234,18 @@ INSERT INTO tb_lista_favoritos (dt_hora_insercao, fk_favoritos, fk_produto) VALU
 ('2024-04-12 09:20:00', 9, 7), -- Favorito 8, Produto 7
 ('2024-04-12 09:30:00', 10, 9); -- Favorito 10, Produto 9
 
+-- Inserts para tabela tb_produto_chamado
+INSERT INTO tb_produto_chamado (status_chamado, data_hora_abertura, fk_usuario, fk_produto) VALUES
+(0, '2024-04-12 10:00:00', 1, 2), -- Chamado aberto pelo usuário 1 para o produto 2
+(1, '2024-04-12 10:10:00', 3, 4), -- Chamado aberto pelo usuário 3 para o produto 4
+(2, '2024-04-12 10:20:00', 5, 6), -- Chamado aberto pelo usuário 5 para o produto 6
+(0, '2024-04-12 10:30:00', 7, 8), -- Chamado aberto pelo usuário 7 para o produto 8
+(1, '2024-04-12 10:40:00', 9, 10), -- Chamado aberto pelo usuário 9 para o produto 10
+(2, '2024-04-12 10:50:00', 2, 1), -- Chamado aberto pelo usuário 2 para o produto 1
+(0, '2024-04-12 11:00:00', 4, 3), -- Chamado aberto pelo usuário 4 para o produto 3
+(1, '2024-04-12 11:10:00', 6, 5), -- Chamado aberto pelo usuário 6 para o produto 5
+(2, '2024-04-12 11:20:00', 8, 7), -- Chamado aberto pelo usuário 8 para o produto 7
+(0, '2024-04-12 11:30:00', 10, 9); -- Chamado aberto pelo usuário 10 para o produto
 
 
 -- Selects ------------------------------------------------------------
