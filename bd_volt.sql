@@ -100,7 +100,7 @@ create table if not exists tb_lista_favoritos
 create table if not exists tb_produto_chamado
 (
 	id int primary key auto_increment,
-    status_chamado tinyint(1) not null,
+    status_chamado tinyint(2) not null,
     data_hora_abertura datetime not null,
     data_hora_fechamento datetime,
 	fk_usuario int,

@@ -668,9 +668,9 @@
     <tr>
       <td>status_chamado</td>
       <td>TINYINT</td>
-      <td>1</td>
+      <td>2</td>
       <td>NOT NULL</td>
-      <td>Status atual do chamado: 0 = Em andamento; 1 = Cancelado; 2 = Finalizado</td>
+      <td>Status atual do chamado: 0 = Em andamento; 1 = Cancelada; 2 = Concluída</td>
     </tr>
     <tr>
       <td>dt_hora_abertura</td>
