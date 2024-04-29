@@ -46,6 +46,7 @@ create table if not exists tb_login
 	senha varchar(255) not null unique,
 	fk_usuario int,
 	foreign key(fk_usuario) references tb_usuario(id)
+    on delete cascade
 ); 
 
 -- Clique produto
@@ -73,7 +74,8 @@ create table if not exists tb_classificacao_produto
 (
 	id int primary key auto_increment,
 	fk_tag_produto int,
-	foreign key(fk_tag_produto) references tb_tag_produto(id),
+	foreign key(fk_tag_produto) references tb_tag_produto(id)
+    on delete set null,
 	fk_produto int,
 	foreign key(fk_produto) references tb_produto(id)
     on delete cascade
