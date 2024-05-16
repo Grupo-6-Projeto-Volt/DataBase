@@ -84,16 +84,9 @@ create table if not exists tb_classificacao_produto
 create table if not exists tb_favoritos
 (
 	id int primary key auto_increment,
-    fk_usuario int,
-    foreign key(fk_usuario) references tb_usuario(id)
-);
-
-create table if not exists tb_lista_favoritos
-(
-	id int primary key auto_increment,
     dt_hora_insercao datetime,
-    fk_favoritos int,
-    foreign key(fk_favoritos) references tb_favoritos(id),
+    fk_usuario int,
+    foreign key(fk_usuario) references tb_usuario(id),
 	fk_produto int,
     foreign key(fk_produto) references tb_produto(id)
     on delete cascade
@@ -211,30 +204,17 @@ INSERT INTO tb_classificacao_produto (fk_produto, fk_tag_produto) VALUES
 (10, 5); -- Notebook HP é uma novidade
 
 -- Inserts para tabela tb_favoritos
-INSERT INTO tb_favoritos (fk_usuario) VALUES 
-(1), 
-(3), 
-(5), 
-(7), 
-(9), 
-(2), 
-(4), 
-(6), 
-(8), 
-(10);
-
--- Inserts para tabela tb_lista_favoritos
-INSERT INTO tb_lista_favoritos (dt_hora_insercao, fk_favoritos, fk_produto) VALUES
-('2024-04-12 08:00:00', 1, 2), -- Favorito 1, Produto 2
-('2024-04-12 08:10:00', 2, 4), -- Favorito 3, Produto 4
-('2024-04-12 08:20:00', 3, 6), -- Favorito 5, Produto 6
-('2024-04-12 08:30:00', 4, 8), -- Favorito 7, Produto 8
-('2024-04-12 08:40:00', 5, 10), -- Favorito 9, Produto 10
-('2024-04-12 08:50:00', 6, 1), -- Favorito 2, Produto 1
-('2024-04-12 09:00:00', 7, 3), -- Favorito 4, Produto 3
-('2024-04-12 09:10:00', 8, 5), -- Favorito 6, Produto 5
-('2024-04-12 09:20:00', 9, 7), -- Favorito 8, Produto 7
-('2024-04-12 09:30:00', 10, 9); -- Favorito 10, Produto 9
+INSERT INTO tb_favoritos (dt_hora_insercao, fk_usuario, fk_produto) VALUES
+('2024-04-12 08:00:00', 1, 2), -- Usuario 1, Produto 2
+('2024-04-12 08:10:00', 2, 4), -- Usuario 3, Produto 4
+('2024-04-12 08:20:00', 3, 6), -- Usuario 5, Produto 6
+('2024-04-12 08:30:00', 4, 8), -- Usuario 7, Produto 8
+('2024-04-12 08:40:00', 5, 10), -- Usuario 9, Produto 10
+('2024-04-12 08:50:00', 6, 1), -- Usuario 2, Produto 1
+('2024-04-12 09:00:00', 7, 3), -- Usuario 4, Produto 3
+('2024-04-12 09:10:00', 8, 5), -- Usuario 6, Produto 5
+('2024-04-12 09:20:00', 9, 7), -- Usuario 8, Produto 7
+('2024-04-12 09:30:00', 10, 9); -- Usuario 10, Produto 9
 
 -- Inserts para tabela tb_produto_chamado
 INSERT INTO tb_produto_chamado (status_chamado, data_hora_abertura, fk_usuario, fk_produto) VALUES
@@ -259,7 +239,6 @@ select * from tb_imagem_produto;
 select * from tb_tag_produto;
 select * from tb_classificacao_produto;
 select * from tb_favoritos;
-select * from tb_lista_favoritos;
 
 
 -- Views --------------------------------------------------------------
