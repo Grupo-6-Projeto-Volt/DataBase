@@ -56,7 +56,8 @@ create table if not exists tb_click_produto
 	data_hora_click datetime,
 	possivel_compra tinyint(1),
 	fk_usuario int,
-	foreign key(fk_usuario) references tb_usuario(id),
+	foreign key(fk_usuario) references tb_usuario(id)
+	on delete set null,
 	fk_produto int,
 	foreign key(fk_produto) references tb_produto(id)
     on delete cascade
@@ -86,7 +87,8 @@ create table if not exists tb_favoritos
 	id int primary key auto_increment,
     dt_hora_insercao datetime,
     fk_usuario int,
-    foreign key(fk_usuario) references tb_usuario(id),
+    foreign key(fk_usuario) references tb_usuario(id)
+    on delete cascade,
 	fk_produto int,
     foreign key(fk_produto) references tb_produto(id)
     on delete cascade
@@ -99,7 +101,8 @@ create table if not exists tb_produto_chamado
     data_hora_abertura datetime not null,
     data_hora_fechamento datetime,
 	fk_usuario int,
-	foreign key(fk_usuario) references tb_usuario(id),
+	foreign key(fk_usuario) references tb_usuario(id)
+    on delete cascade,
 	fk_produto int,
 	foreign key(fk_produto) references tb_produto(id)
     on delete cascade
