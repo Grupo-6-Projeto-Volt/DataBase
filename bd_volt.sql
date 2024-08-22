@@ -14,30 +14,6 @@ create table if not exists tb_usuario
 	categoria tinyint(1)
 );
 
--- Produto
-create table if not exists tb_produto
-(
-	id int primary key auto_increment,
-	nome varchar(80) not null,
-	descricao varchar(300) not null,
-	categoria varchar(100) not null,
-	preco decimal(8,2) not null,
-	qtd_estoque int,
-    estado_geral varchar(45) not null,
-    desconto int
-);
-
--- Imagem produto
-create table if not exists tb_imagem_produto
-(
-	id int primary key auto_increment,
-	nome varchar(100),
-	codigo_imagem blob,
-	fk_produto int,
-	foreign key(fk_produto) references tb_produto(id)
-    on delete cascade
-);
-
 -- Login
 create table if not exists tb_login
 (
@@ -48,6 +24,53 @@ create table if not exists tb_login
 	foreign key(fk_usuario) references tb_usuario(id)
     on delete cascade
 ); 
+
+-- Categoria
+create table if not exists tb_categoria
+(
+	id int primary key auto_increment,
+    nome varchar(30)
+);
+
+-- Produto
+create table if not exists tb_produto
+(
+	id int primary key auto_increment,
+	nome varchar(80) not null,
+	descricao varchar(300) not null,
+	fk_categoria int,
+    foreign key(fk_categoria) references tb_categoria(id)
+    on delete cascade,
+	preco decimal(8,2) not null,
+	qtd_estoque int,
+    estado_geral varchar(45) not null,
+    desconto int,
+    data_inicio_desconto date,
+    data_fim_desconto date
+);
+
+-- Cor produto
+create table if not exists tb_cor_produto
+(
+	id int,
+    nome varchar(40),
+    hex_id char(7),
+	fk_produto int,
+    foreign key(fk_produto) references tb_produto(id)
+    on delete cascade
+);
+
+-- Imagem produto
+create table if not exists tb_imagem_produto
+(
+	id int primary key auto_increment,
+	nome varchar(100),
+	codigo_imagem blob,
+	indice_vt int,
+	fk_produto int,
+	foreign key(fk_produto) references tb_produto(id)
+    on delete cascade
+);
 
 -- Clique produto
 create table if not exists tb_click_produto
@@ -136,31 +159,69 @@ INSERT INTO tb_login (id, email, senha, fk_usuario) VALUES
 (UUID(), 'rafaela@example.com', 'B6A9T3x^4N*oQz#7&f$KlRt1M8WuJpV@Dc^w?I2q@5Xn7e$S6!i^HvGjZr#Ld%yP0^sY^E8g^3mFk@U2#V4^9b1@o^h', 9),
 (UUID(), 'marcos@example.com', '8UfT4^N1mDv6gBzJ&Y?E@wX9x0#H5?iR$G^lW2n@qL#rA!PpS7^K*6^yMjO3t%ZcQ&dV^uI7s3#^oC9b@4h2^G8^e@k', 10);
 
+-- Insert para tabela tb_categoria
+INSERT INTO tb_categoria(nome) VALUES
+('Computador'),
+('Celular'),
+('Acessório'),
+('Caixa de som');
+
 -- Inserts para tabela tb_produto
-INSERT INTO tb_produto (nome, descricao, categoria, preco, qtd_estoque, estado_geral, desconto) VALUES
-('Notebook Dell', 'Notebook Dell Inspiron 15', 'Computador', 2500.00, 10, "Novo", 15),
-('Smartphone Samsung', 'Smartphone Samsung Galaxy S21', 'Celular', 1800.00, 15, "Semi novo", 4),
-('Teclado mecânico', 'Teclado mecânico para jogos', 'Acessório', 150.00, 20, "Novo", 0),
-('Mouse gamer', 'Mouse gamer com sensor óptico', 'Acessório', 80.00, 30, "Semi novo", 0),
-('Monitor LG', 'Monitor LG UltraWide 29', 'Acessório', 600.00, 5, "Novo", 10),
-('iPhone 13', 'Smartphone Apple iPhone 13', 'Celular', 2000.00, 12, "Novo", 7),
-('Headset Bluetooth', 'Headset Bluetooth JBL', 'Acessório', 120.00, 25, "Semi novo", 10),
-('Tablet Samsung', 'Tablet Samsung Galaxy Tab A7', 'Acessório', 400.00, 18, "Semi novo", 2),
-('Câmera Canon', 'Câmera digital Canon EOS Rebel T7', 'Acessório', 700.00, 8, "Novo", 12),
-('Notebook HP', 'Notebook HP Pavilion 14', 'Computador', 1800.00, 10, "Semi novo", 5);
+INSERT INTO tb_produto (nome, descricao, fk_categoria, preco, qtd_estoque, estado_geral, desconto) VALUES
+('Notebook Dell', 'Notebook Dell Inspiron 15', '1', 2500.00, 10, "Novo", 15),
+('Smartphone Samsung', 'Smartphone Samsung Galaxy S21', '2', 1800.00, 15, "Semi novo", 4),
+('Teclado mecânico', 'Teclado mecânico para jogos', '3', 150.00, 20, "Novo", 0),
+('Mouse gamer', 'Mouse gamer com sensor óptico', '3', 80.00, 30, "Semi novo", 0),
+('Monitor LG', 'Monitor LG UltraWide 29', '3', 600.00, 5, "Novo", 10),
+('iPhone 13', 'Smartphone Apple iPhone 13', '2', 2000.00, 12, "Novo", 7),
+('Headset Bluetooth', 'Headset Bluetooth JBL', '3', 120.00, 25, "Semi novo", 10),
+('JBL Partybox', 'Jbl Partybox Encore Essential', '4', 1500.00, 11, "Semi novo", 0),
+('Câmera Canon', 'Câmera digital Canon EOS Rebel T7', '3', 700.00, 8, "Novo", 12),
+('Notebook HP', 'Notebook HP Pavilion 14', '1', 1800.00, 10, "Semi novo", 5);
+
+-- Inserts para tabela tb_cor_produto
+INSERT INTO tb_cor_produto (nome, hex_id, fk_produto) VALUES
+('Preto', '#000000', 1),     -- Produto 1 com cor preta
+('Branco', '#FFFFFF', 1),    -- Produto 1 com cor branca
+('Vermelho', '#FF0000', 2),  -- Produto 2 com cor vermelha
+('Preto', '#000000', 2),     -- Produto 2 com cor preta
+('Verde', '#00FF00', 3),     -- Produto 3 com cor verde
+('Azul', '#0000FF', 4),      -- Produto 4 com cor azul
+('Amarelo', '#FFFF00', 4),   -- Produto 4 com cor amarela
+('Magenta', '#FF00FF', 5),   -- Produto 5 com cor magenta
+('Ciano', '#00FFFF', 6),     -- Produto 6 com cor ciano
+('Cinza', '#808080', 7),     -- Produto 7 com cor cinza
+('Prata', '#C0C0C0', 8),     -- Produto 8 com cor prata
+('Laranja', '#FFA500', 9),   -- Produto 9 com cor laranja
+('Roxo', '#800080', 10),     -- Produto 10 com cor roxa
+('Marrom', '#8B4513', 10),   -- Produto 10 com cor marrom
+('Azul Aço', '#4682B4', 9),  -- Produto 9 com cor azul aço
+('Dourado', '#FFD700', 8),   -- Produto 8 com cor dourada
+('Azul Marinho', '#000080', 7); -- Produto 7 com cor azul marinho
+
 
 -- Inserts para tabela tb_imagem_produto
-INSERT INTO tb_imagem_produto (nome, codigo_imagem, fk_produto) VALUES
-('Imagem Notebook Dell', 'https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/v1/champion-tiles/35/35015.jpg', 1),
-('Imagem Smartphone Samsung', 'https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/v1/champion-tiles/35/35015.jpg', 2),
-('Imagem Teclado mecânico', 'https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/v1/champion-tiles/35/35015.jpg', 3),
-('Imagem Mouse gamer', 'https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/v1/champion-tiles/35/35015.jpg', 4),
-('Imagem Monitor LG', 'https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/v1/champion-tiles/35/35015.jpg', 5),
-('Imagem iPhone 13', 'https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/v1/champion-tiles/35/35015.jpg', 6),
-('Imagem Headset Bluetooth', 'https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/v1/champion-tiles/35/35015.jpg', 7),
-('Imagem Tablet Samsung', 'https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/v1/champion-tiles/35/35015.jpg', 8),
-('Imagem Câmera Canon', 'https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/v1/champion-tiles/35/35015.jpg', 9),
-('Imagem Notebook HP', 'https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/v1/champion-tiles/35/35015.jpg', 10);
+INSERT INTO tb_imagem_produto (nome, codigo_imagem, indice_vt, fk_produto) VALUES
+('Imagem Notebook Dell frente', 'https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/v1/champion-tiles/35/35015.jpg', 0, 1),
+('Imagem Notebook Dell lado', 'https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/v1/champion-tiles/35/35015.jpg', 1, 1),
+('Imagem Notebook Dell atras', 'https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/v1/champion-tiles/35/35015.jpg', 2, 1),
+('Imagem Smartphone Samsung frente', 'https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/v1/champion-tiles/35/35015.jpg', 0, 2),
+('Imagem Smartphone Samsung lado', 'https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/v1/champion-tiles/35/35015.jpg', 1, 2),
+('Imagem Teclado mecânico frente', 'https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/v1/champion-tiles/35/35015.jpg', 0, 3),
+('Imagem Teclado mecânico atras', 'https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/v1/champion-tiles/35/35015.jpg', 1, 3),
+('Imagem Mouse gamer frente', 'https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/v1/champion-tiles/35/35015.jpg', 0, 4),
+('Imagem Monitor LG frente', 'https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/v1/champion-tiles/35/35015.jpg', 0, 5),
+('Imagem Monitor LG lado', 'https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/v1/champion-tiles/35/35015.jpg', 1, 5),
+('Imagem Monitor LG detalhe', 'https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/v1/champion-tiles/35/35015.jpg', 2, 5),
+('Imagem Monitor LG atras', 'https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/v1/champion-tiles/35/35015.jpg', 3, 5),
+('Imagem iPhone 13 frente', 'https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/v1/champion-tiles/35/35015.jpg', 0, 6),
+('Imagem iPhone 13 detalhe', 'https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/v1/champion-tiles/35/35015.jpg', 1, 6),
+('Imagem Headset Bluetooth frente', 'https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/v1/champion-tiles/35/35015.jpg', 0, 7),
+('Imagem Tablet Samsung frente', 'https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/v1/champion-tiles/35/35015.jpg', 0, 8),
+('Imagem Câmera Canon frente', 'https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/v1/champion-tiles/35/35015.jpg', 0, 9),
+('Imagem Câmera Canon detalhe', 'https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/v1/champion-tiles/35/35015.jpg', 1, 9),
+('Imagem Câmera Canon lado', 'https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/v1/champion-tiles/35/35015.jpg', 2, 9),
+('Imagem Notebook HP frente', 'https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/v1/champion-tiles/35/35015.jpg', 0, 10);
 
 -- Inserts para tabela tb_click_produto
 INSERT INTO tb_click_produto (data_hora_click, possivel_compra, fk_usuario, fk_produto) VALUES
