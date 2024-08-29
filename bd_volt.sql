@@ -25,7 +25,7 @@ create table if not exists tb_login
     on delete cascade
 ); 
 
--- Categoria.
+-- Categoria
 create table if not exists tb_categoria
 (
 	id int primary key auto_increment,
