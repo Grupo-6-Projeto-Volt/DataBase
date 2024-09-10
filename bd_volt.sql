@@ -36,8 +36,8 @@ create table if not exists tb_categoria
 create table if not exists tb_produto
 (
 	id int primary key auto_increment,
-	nome varchar(80) not null,
-	descricao varchar(300) not null,
+	nome varchar(120) not null,
+	descricao varchar(400) not null,
 	fk_categoria int,
     foreign key(fk_categoria) references tb_categoria(id)
     on delete cascade,
@@ -167,17 +167,17 @@ INSERT INTO tb_categoria(nome) VALUES
 ('Caixa de som');
 
 -- Inserts para tabela tb_produto
-INSERT INTO tb_produto (nome, descricao, fk_categoria, preco, qtd_estoque, estado_geral, desconto) VALUES
-('Notebook Dell', 'Notebook Dell Inspiron 15', '1', 2500.00, 10, "Novo", 15),
-('Smartphone Samsung', 'Smartphone Samsung Galaxy S21', '2', 1800.00, 15, "Semi novo", 4),
-('Teclado mecânico', 'Teclado mecânico para jogos', '3', 150.00, 20, "Novo", 0),
-('Mouse gamer', 'Mouse gamer com sensor óptico', '3', 80.00, 30, "Semi novo", 0),
-('Monitor PCFort', 'Monitor LG UltraWide 29', '3', 600.00, 5, "Novo", 10),
-('iPhone 13', 'Smartphone Apple iPhone 13', '2', 2000.00, 12, "Novo", 7),
-('Headset Bluetooth', 'Headset Bluetooth JBL', '3', 120.00, 25, "Semi novo", 10),
-('JBL Partybox', 'Jbl Partybox Encore Essential', '4', 1500.00, 11, "Semi novo", 0),
-('Câmera Canon', 'Câmera digital Canon EOS Rebel T7', '3', 700.00, 8, "Novo", 12),
-('Notebook HP', 'Notebook HP Pavilion 14', '1', 1800.00, 10, "Semi novo", 5);
+INSERT INTO tb_produto (nome, descricao, fk_categoria, preco, qtd_estoque, estado_geral, desconto, data_inicio_desconto, data_fim_desconto) VALUES
+('Notebook Dell Inspiron 15', 'Notebook Dell Inspiron 15 com tela de 15,6 polegadas, processador Intel Core i5, 8GB de RAM e 256GB de SSD. Ideal para produtividade e entretenimento, com design elegante e bateria de longa duração.', 1, 2500.00, 10, 'Novo', 15, '2024-09-10', '2024-09-20'),
+('Smartphone Samsung Galaxy S21', 'Smartphone Samsung Galaxy S21 com câmera tripla de 64MP, tela de 6,2 polegadas AMOLED, 128GB de armazenamento interno e 8GB de RAM. Ótima performance para jogos e multitarefas.', 2, 1800.00, 15, 'Semi novo', 4, NULL, NULL),
+('Teclado Mecânico Gamer Husky Gaming Blizzard', 'Teclado mecânico para jogos com switches Gateron, iluminação RGB personalizável e design ergonômico. Ideal para jogadores que buscam precisão e durabilidade.', 3, 150.00, 20, 'Novo', 0, NULL, NULL),
+('Mouse Gamer Logitech G203 LIGHTSYNC RGB', 'Mouse gamer com sensor óptico de alta precisão, 6 botões programáveis e DPI ajustável até 7200. Design confortável para longas sessões de jogo.', 3, 80.00, 30, 'Semi novo', 0, NULL, NULL),
+('Monitor PCFort Gamer H238F165 23.8'' Led Full Hd 165hz Freesync Hdmi Display Port VESA', 'Monitor LG UltraWide de 29 polegadas com resolução Full HD, taxa de atualização de 75Hz e tecnologia AMD FreeSync. Perfeito para produtividade e jogos imersivos.', 3, 600.00, 5, 'Novo', 10, '2024-09-08', '2024-09-18'),
+('Apple iPhone 13 (128 GB)', 'Smartphone Apple iPhone 13 com câmera dupla de 12MP, gravação em 4K, 128GB de armazenamento e processador A15 Bionic. Excelente para fotos, vídeos e desempenho multitarefa.', 2, 2000.00, 12, 'Novo', 7, '2024-09-15', '2024-09-25'),
+('QCY H2 PRO Fone de Ouvido Bluetooth', 'Headset Bluetooth JBL com som estéreo de alta qualidade, até 20 horas de duração de bateria e microfone integrado para chamadas nítidas.', 3, 120.00, 25, 'Semi novo', 10, NULL, NULL),
+('JBL Partybox 110', 'Caixa de som JBL Partybox Encore Essential com 100W de potência, luzes LED integradas e bateria recarregável com até 6 horas de autonomia. Ideal para festas e eventos.', 4, 1500.00, 11, 'Semi novo', 0, NULL, NULL),
+('Câmera digital Canon EOS Rebel T7', 'Câmera digital Canon EOS Rebel T7 com sensor CMOS de 24.1MP, gravação de vídeos em Full HD, e conectividade Wi-Fi para compartilhamento rápido de fotos e vídeos.', 3, 700.00, 8, 'Novo', 12, NULL, NULL),
+('Notebook HP Pavilion 14', 'Notebook HP Pavilion 14 com processador Intel Core i7, 16GB de RAM e 512GB de SSD. Equipado com tela Full HD e ótimo desempenho para tarefas profissionais e de entretenimento.', 1, 1800.00, 10, 'Semi novo', 5, NULL, NULL);
 
 -- Inserts para tabela tb_cor_produto
 INSERT INTO tb_cor_produto (nome, hex_id, fk_produto) VALUES
@@ -217,7 +217,7 @@ INSERT INTO tb_imagem_produto (nome, codigo_imagem, indice_vt, fk_produto) VALUE
 ('Imagem iPhone 13 frente', 'https://imgs.casasbahia.com.br/55048759/1g.jpg', 0, 6),
 ('Imagem iPhone 13 detalhe', 'https://imgs.casasbahia.com.br/55048759/5g.jpg', 1, 6),
 ('Imagem Headset Bluetooth frente', 'https://m.media-amazon.com/images/I/61dczD-S7iL._AC_UF1000,1000_QL80_.jpg', 0, 7),
-('Imagem Tablet Samsung frente', 'https://imgs.casasbahia.com.br/55065773/2g.jpg', 0, 8),
+('Imagem JBL Partybox frente', 'https://m.media-amazon.com/images/I/51DIiBDMu0L._AC_SL1000_.jpg', 0, 8),
 ('Imagem Câmera Canon frente', 'https://m.media-amazon.com/images/I/71Is-Zv6A0L._AC_SY450_.jpg', 0, 9),
 ('Imagem Câmera Canon detalhe', 'https://m.media-amazon.com/images/I/71IepL5sXRL._AC_SY450_.jpg', 1, 9),
 ('Imagem Câmera Canon lado', 'https://m.media-amazon.com/images/I/61BjZcbeZJL._AC_SY450_.jpg', 2, 9),
@@ -303,7 +303,5 @@ select * from tb_imagem_produto;
 select * from tb_tag_produto;
 select * from tb_classificacao_produto;
 select * from tb_favoritos;
-
-
 -- Views --------------------------------------------------------------
 -- Procedures ---------------------------------------------------------
