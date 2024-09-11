@@ -304,4 +304,141 @@ select * from tb_tag_produto;
 select * from tb_classificacao_produto;
 select * from tb_favoritos;
 -- Views --------------------------------------------------------------
+-- view corrigida
+create view `vwchamadosgrafico` as 
+select qtd, dia, mes, id,status_chamado as status from (
+select 
+id,
+status_chamado,
+count(status_chamado) as qtd, 
+DATE_FORMAT(data_hora_abertura, '%d') as dia,
+DATE_FORMAT(data_hora_abertura, '%m') as mes
+from tb_produto_chamado where status_chamado >= 1
+and data_hora_abertura >= date_sub(now(), interval 6 month)
+group by dia, mes, status_chamado,id
+) as viz order by status_chamado;
+--
+select * from vwchamadosgrafico;
+
+-- view corrigida
+create view `vwcategoriasacessos` as 
+select dense_rank() over (order by tb_categoria.id) as id, count(data_hora_click) as acessos, tb_categoria.nome as categoria
+from tb_click_produto join tb_produto on fk_produto = tb_produto.id join tb_categoria on fk_categoria = tb_categoria.id group by
+categoria,tb_categoria.id;
+--
+select * from vwcategoriasacessos;
+
+-- view corrigida
+create view  `vwprodutosmaisacessados` as
+select tb_produto.id as id, tb_produto.qtd_estoque as qtd,tb_produto.nome,count(data_hora_click) as acessos,
+tb_imagem_produto.codigo_imagem as url from tb_produto join tb_click_produto on tb_produto.id = fk_produto 
+join tb_imagem_produto on tb_imagem_produto.fk_produto = tb_produto.id group by nome,qtd,id,url limit 6; 
+select * from vwprodutosmaisacessados;
+
+-- kpis
+-- view corrigida
+create view `vwfaturamento` as
+select sum(tb_produto.preco) from tb_produto_chamado join tb_produto on fk_produto = tb_produto.id where status_chamado = 2;
+select * from vwfaturamento;
+
+-- view corrigida
+create view `vwacessossetedias` as
+select qtd,id from (
+select 
+status_chamado,
+id,
+count(status_chamado) as qtd
+from tb_produto_chamado where status_chamado = 2
+and data_hora_fechamento < date_sub(now(), interval 7 day)
+group by status_chamado,id
+) as viz order by status_chamado;
+select * from vwacessossetedias;
+
+-- view corrigida
+create view `vwtaxaretorno` as
+select tb_usuario.id as id,tb_usuario.nome as usuario,count(tb_click_produto.data_hora_click) as cliques from tb_click_produto
+join tb_usuario on fk_usuario = tb_usuario.id group by tb_usuario.id having cliques > 1 order by cliques desc;
+
+select * from vwtaxaretorno;
 -- Procedures ---------------------------------------------------------
+DELIMITER //
+CREATE function `fnRemoveAccents`(`str` TEXT)
+	RETURNS text
+    LANGUAGE SQL
+    DETERMINISTIC
+    NO SQL
+    SQL SECURITY INVOKER
+    COMMENT ''
+
+BEGIN
+    SET str = REPLACE(str,'Š','S');
+    SET str = REPLACE(str,'š','s');
+    SET str = REPLACE(str,'Ð','Dj');
+    SET str = REPLACE(str,'Ž','Z');
+    SET str = REPLACE(str,'ž','z');
+    SET str = REPLACE(str,'À','A');
+    SET str = REPLACE(str,'Á','A');
+    SET str = REPLACE(str,'Â','A');
+    SET str = REPLACE(str,'Ã','A');
+    SET str = REPLACE(str,'Ä','A');
+    SET str = REPLACE(str,'Å','A');
+    SET str = REPLACE(str,'Æ','A');
+    SET str = REPLACE(str,'Ç','C');
+    SET str = REPLACE(str,'È','E');
+    SET str = REPLACE(str,'É','E');
+    SET str = REPLACE(str,'Ê','E');
+    SET str = REPLACE(str,'Ë','E');
+    SET str = REPLACE(str,'Ì','I');
+    SET str = REPLACE(str,'Í','I');
+    SET str = REPLACE(str,'Î','I');
+    SET str = REPLACE(str,'Ï','I');
+    SET str = REPLACE(str,'Ñ','N');
+    SET str = REPLACE(str,'Ò','O');
+    SET str = REPLACE(str,'Ó','O');
+    SET str = REPLACE(str,'Ô','O');
+    SET str = REPLACE(str,'Õ','O');
+    SET str = REPLACE(str,'Ö','O');
+    SET str = REPLACE(str,'Ø','O');
+    SET str = REPLACE(str,'Ù','U');
+    SET str = REPLACE(str,'Ú','U');
+    SET str = REPLACE(str,'Û','U');
+    SET str = REPLACE(str,'Ü','U');
+    SET str = REPLACE(str,'Ý','Y');
+    SET str = REPLACE(str,'Þ','B');
+    SET str = REPLACE(str,'ß','Ss');
+    SET str = REPLACE(str,'à','a');
+    SET str = REPLACE(str,'á','a');
+    SET str = REPLACE(str,'â','a');
+    SET str = REPLACE(str,'ã','a');
+    SET str = REPLACE(str,'ä','a');
+    SET str = REPLACE(str,'å','a');
+    SET str = REPLACE(str,'æ','a');
+    SET str = REPLACE(str,'ç','c');
+    SET str = REPLACE(str,'è','e');
+    SET str = REPLACE(str,'é','e');
+    SET str = REPLACE(str,'ê','e');
+    SET str = REPLACE(str,'ë','e');
+    SET str = REPLACE(str,'ì','i');
+    SET str = REPLACE(str,'í','i');
+    SET str = REPLACE(str,'î','i');
+    SET str = REPLACE(str,'ï','i');
+    SET str = REPLACE(str,'ð','o');
+    SET str = REPLACE(str,'ñ','n');
+    SET str = REPLACE(str,'ò','o');
+    SET str = REPLACE(str,'ó','o');
+    SET str = REPLACE(str,'ô','o');
+    SET str = REPLACE(str,'õ','o');
+    SET str = REPLACE(str,'ö','o');
+    SET str = REPLACE(str,'ø','o');
+    SET str = REPLACE(str,'ù','u');
+    SET str = REPLACE(str,'ú','u');
+    SET str = REPLACE(str,'û','u');
+    SET str = REPLACE(str,'ý','y');
+    SET str = REPLACE(str,'ý','y');
+    SET str = REPLACE(str,'þ','b');
+    SET str = REPLACE(str,'ÿ','y');
+    SET str = REPLACE(str,'ƒ','f');
+
+    RETURN str;
+END
+// DELIMITER ;
