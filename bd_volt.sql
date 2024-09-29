@@ -52,7 +52,7 @@ create table if not exists tb_produto
 -- Cor produto
 create table if not exists tb_cor_produto
 (
-	id int,
+	id int primary key auto_increment,
     nome varchar(40),
     hex_id char(7),
 	fk_produto int,
@@ -277,8 +277,13 @@ INSERT INTO tb_favoritos (dt_hora_insercao, fk_usuario, fk_produto) VALUES
 ('2024-04-12 08:50:00', 6, 1), -- Usuario 2, Produto 1
 ('2024-04-12 09:00:00', 7, 3), -- Usuario 4, Produto 3
 ('2024-04-12 09:10:00', 8, 5), -- Usuario 6, Produto 5
-('2024-04-12 09:20:00', 9, 7), -- Usuario 8, Produto 7
-('2024-04-12 09:30:00', 10, 9); -- Usuario 10, Produto 9
+('2024-04-12 09:20:00', 9, 7); -- Usuario 8, Produto 7
+
+INSERT INTO tb_favoritos (dt_hora_insercao, fk_usuario, fk_produto) VALUES
+('2024-04-12 09:30:00', 11, 2), -- Usuario 10, Produto 9
+('2024-04-12 09:30:00', 11, 4), -- Usuario 10, Produto 9
+('2024-04-12 09:30:00', 11, 5), -- Usuario 10, Produto 9
+('2024-04-12 09:30:00', 11, 9); -- Usuario 10, Produto 9
 
 -- Inserts para tabela tb_produto_chamado
 INSERT INTO tb_produto_chamado (status_chamado, data_hora_abertura, fk_usuario, fk_produto) VALUES
