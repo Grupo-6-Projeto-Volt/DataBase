@@ -280,10 +280,10 @@ INSERT INTO tb_favoritos (dt_hora_insercao, fk_usuario, fk_produto) VALUES
 ('2024-04-12 09:20:00', 9, 7); -- Usuario 8, Produto 7
 
 INSERT INTO tb_favoritos (dt_hora_insercao, fk_usuario, fk_produto) VALUES
-('2024-04-12 09:30:00', 11, 2), -- Usuario 10, Produto 9
-('2024-04-12 09:30:00', 11, 4), -- Usuario 10, Produto 9
-('2024-04-12 09:30:00', 11, 5), -- Usuario 10, Produto 9
-('2024-04-12 09:30:00', 11, 9); -- Usuario 10, Produto 9
+('2024-04-12 09:30:00', 10, 2), -- Usuario 10, Produto 9
+('2024-04-12 09:30:00', 10, 4), -- Usuario 10, Produto 9
+('2024-04-12 09:30:00', 10, 5), -- Usuario 10, Produto 9
+('2024-04-12 09:30:00', 10, 9); -- Usuario 10, Produto 9
 
 -- Inserts para tabela tb_produto_chamado
 INSERT INTO tb_produto_chamado (status_chamado, data_hora_abertura, fk_usuario, fk_produto) VALUES
@@ -308,6 +308,7 @@ select * from tb_imagem_produto;
 select * from tb_tag_produto;
 select * from tb_classificacao_produto;
 select * from tb_favoritos;
+select * from tb_imagem_produto;
 -- Views --------------------------------------------------------------
 -- view corrigida
 create view `vwchamadosgrafico` as 
