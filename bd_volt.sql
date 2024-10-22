@@ -336,10 +336,24 @@ select * from vwcategoriasacessos;
 
 -- view corrigida
 create view  `vwprodutosmaisacessados` as
-select tb_produto.id as id, tb_produto.qtd_estoque as qtd,tb_produto.nome,count(data_hora_click) as acessos,
-tb_imagem_produto.codigo_imagem as url from tb_produto join tb_click_produto on tb_produto.id = fk_produto 
-join tb_imagem_produto on tb_imagem_produto.fk_produto = tb_produto.id group by nome,qtd,id,url limit 6; 
+select 
+	tb_produto.id as id, 
+	tb_produto.qtd_estoque as qtd,
+    tb_produto.nome,
+    count(data_hora_click) as acessos,
+    tb_imagem_produto.codigo_imagem as url 
+
+from tb_produto 
+	join tb_click_produto on tb_produto.id = fk_produto 
+	join tb_imagem_produto on tb_imagem_produto.fk_produto = tb_produto.id
+    and tb_imagem_produto.indice_vt = 0
+
+group by nome, qtd, id, url 
+order by 4 
+limit 6; 
+
 select * from vwprodutosmaisacessados;
+-- DROP VIEW vwprodutosmaisacessados;
 
 -- kpis
 -- view corrigida
