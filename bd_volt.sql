@@ -144,7 +144,8 @@ INSERT INTO tb_usuario (nome, email, telefone, categoria) VALUES
 ('Gabriel Martins', 'gabriel@example.com', '555555555', 1),
 ('Laura Oliveira', 'laura@example.com', '666666666', 0),
 ('Rafaela Pereira', 'rafaela@example.com', '777777777', 1),
-('Marcos Almeida', 'marcos@example.com', '888888888', 0);
+('Marcos Almeida', 'marcos@example.com', '888888888', 0),
+('Henrique Akira', 'admin@gmail.com', '(11)91141-0481', 1);
 
 -- Inserts para tabela tb_login
 INSERT INTO tb_login (id, email, senha, fk_usuario) VALUES
@@ -157,7 +158,8 @@ INSERT INTO tb_login (id, email, senha, fk_usuario) VALUES
 (UUID(), 'gabriel@example.com', 'PnLrS5U4I#q%z2dF1jT&vX3h@*g^WcO9VxJ?lNw^6oKpA8s^Q0e7R6^MmBkE#y1@G9YtD2^f^Zi3b$7#u@H@4^9G8c^a', 7),
 (UUID(), 'laura@example.com', '9N!wD4gA%3ZoT&f@j@qY7H#8Kc^sXr1^M*e?V0L?J@I2vEzB5y@tPd^u6Q@G^l$S^pO6x2W8i3bF1r^7n^h#Km6U9C', 8),
 (UUID(), 'rafaela@example.com', 'B6A9T3x^4N*oQz#7&f$KlRt1M8WuJpV@Dc^w?I2q@5Xn7e$S6!i^HvGjZr#Ld%yP0^sY^E8g^3mFk@U2#V4^9b1@o^h', 9),
-(UUID(), 'marcos@example.com', '8UfT4^N1mDv6gBzJ&Y?E@wX9x0#H5?iR$G^lW2n@qL#rA!PpS7^K*6^yMjO3t%ZcQ&dV^uI7s3#^oC9b@4h2^G8^e@k', 10);
+(UUID(), 'marcos@example.com', '8UfT4^N1mDv6gBzJ&Y?E@wX9x0#H5?iR$G^lW2n@qL#rA!PpS7^K*6^yMjO3t%ZcQ&dV^uI7s3#^oC9b@4h2^G8^e@k', 10),
+(UUID(), 'admin@gmail.com', '$2a$10$lF/NWmArt98gcVjt1BHzTOhb8zN1MQZ626aSJwIRZcGo2SEWOrT9i', 11);
 
 -- Insert para tabela tb_categoria
 INSERT INTO tb_categoria(nome) VALUES
