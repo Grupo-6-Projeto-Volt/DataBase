@@ -248,6 +248,31 @@ INSERT INTO tb_click_produto (data_hora_click, possivel_compra, fk_usuario, fk_p
 ('2024-04-03 18:00:00', 0, 9, 10),
 ('2024-04-04 19:00:00', 1, 10, 10);
 
+-- Inserts novos com os dados do web scraping
+INSERT INTO tb_click_produto (data_hora_click,possivel_compra,fk_usuario,fk_produto) VALUES
+('2024-09-25 18:00:00', 0, 1, 11),
+('2024-09-25 18:10:00', 0, 4, 12),
+('2024-09-25 18:20:00', 0, 1, 13),
+('2024-09-28 18:40:00', 0, 2, 150),
+('2024-09-28 18:40:00', 0, 5, 101),
+('2024-09-28 20:40:00', 0, 3, 24),
+('2024-09-30 20:50:00', 0, 11, 50),
+('2024-09-30 14:30:00', 0, 9, 12),
+('2024-09-30 10:40:00', 0, 6, 30),
+('2024-10-05 10:40:00', 0, 7, 33),
+('2024-10-08 10:0:00', 0, 7, 33),
+('2024-10-08 00:20:00', 0, 1, 20),
+('2024-10-18 13:25:00', 0, 9, 15),
+('2024-10-18 15:40:00', 0, 10, 49),
+('2024-10-20 22:00:00', 0, 8, 69),
+('2024-10-22 17:40:00', 0, 8, 12),
+('2024-10-25 16:40:00', 0, 8, 40),
+('2024-10-25 11:40:00', 0, 3, 90),
+('2024-10-25 21:40:00', 0, 4, 10),
+('2024-10-25 19:40:00', 0, 2, 100),
+('2024-10-25 10:40:00', 0, 5, 177);
+--
+
 -- Inserts para tabela tb_tag_produto
 INSERT INTO tb_tag_produto (tag) VALUES
 ('Ofertas'),
@@ -300,7 +325,6 @@ INSERT INTO tb_produto_chamado (status_chamado, data_hora_abertura, fk_usuario, 
 (2, '2024-04-12 11:20:00', 8, 7), -- Chamado aberto pelo usuário 8 para o produto 7
 (0, '2024-04-12 11:30:00', 10, 9); -- Chamado aberto pelo usuário 10 para o produto
 
-
 -- Selects ------------------------------------------------------------
 select * from tb_usuario;
 select * from tb_login;
@@ -312,75 +336,64 @@ select * from tb_classificacao_produto;
 select * from tb_favoritos;
 select * from tb_imagem_produto;
 -- Views --------------------------------------------------------------
--- view corrigida
-create view `vwchamadosgrafico` as 
-select qtd, dia, mes, id,status_chamado as status from (
-select 
-id,
-status_chamado,
-count(status_chamado) as qtd, 
-DATE_FORMAT(data_hora_abertura, '%d') as dia,
-DATE_FORMAT(data_hora_abertura, '%m') as mes
-from tb_produto_chamado where status_chamado >= 1
-and data_hora_abertura >= date_sub(now(), interval 6 month)
-group by dia, mes, status_chamado,id
-) as viz order by status_chamado;
+-- View de chamados descontinuada
+-- create view `vwchamadosgrafico` as 
+-- select qtd, dia, mes, id,status_chamado as status from (
+-- select 
+-- id,
+-- status_chamado,
+-- count(status_chamado) as qtd, 
+-- DATE_FORMAT(data_hora_abertura, '%d') as dia,
+-- DATE_FORMAT(data_hora_abertura, '%m') as mes
+-- from tb_produto_chamado where status_chamado >= 1
+-- and data_hora_abertura >= date_sub(now(), interval 6 month)
+-- group by dia, mes, status_chamado,id
+-- ) as viz order by status_chamado;
 --
-select * from vwchamadosgrafico;
-
 -- view corrigida
-create view `vwcategoriasacessos` as 
-select dense_rank() over (order by tb_categoria.id) as id, count(data_hora_click) as acessos, tb_categoria.nome as categoria
-from tb_click_produto join tb_produto on fk_produto = tb_produto.id join tb_categoria on fk_categoria = tb_categoria.id group by
+CREATE VIEW `vwcategoriasacessos` AS
+SELECT DENSE_RANK() OVER (ORDER BY tb_categoria.id) AS id, count(data_hora_click) AS acessos, tb_categoria.nome AS categoria
+FROM tb_click_produto JOIN tb_produto ON fk_produto = tb_produto.id JOIN tb_categoria ON fk_categoria = tb_categoria.id GROUP BY
 categoria,tb_categoria.id;
 --
 select * from vwcategoriasacessos;
-
 -- view corrigida
-create view  `vwprodutosmaisacessados` as
-select 
-	tb_produto.id as id, 
-	tb_produto.qtd_estoque as qtd,
-    tb_produto.nome,
-    count(data_hora_click) as acessos,
-    tb_imagem_produto.codigo_imagem as url 
-
-from tb_produto 
-	join tb_click_produto on tb_produto.id = fk_produto 
-	join tb_imagem_produto on tb_imagem_produto.fk_produto = tb_produto.id
-    and tb_imagem_produto.indice_vt = 0
-
-group by nome, qtd, id, url 
-order by 4 
-limit 6; 
-
+CREATE VIEW `vwprodutosmaisacessados` AS
+SELECT tb_produto.id AS id, tb_produto.qtd_estoque AS qtd,tb_produto.nome,
+count(data_hora_click) AS acessos,tb_imagem_produto.codigo_imagem AS url
+FROM tb_produto JOIN tb_click_produto ON tb_produto.id = fk_produto 
+JOIN tb_imagem_produto ON tb_imagem_produto.fk_produto = tb_produto.id
+AND tb_imagem_produto.indice_vt = 0 GROUP BY nome, qtd, id, url 
+ORDER BY acessos DESC LIMIT 7; 
+--
 select * from vwprodutosmaisacessados;
--- DROP VIEW vwprodutosmaisacessados;
-
+--
 -- kpis
+--
 -- view corrigida
-create view `vwfaturamento` as
-select sum(tb_produto.preco) from tb_produto_chamado join tb_produto on fk_produto = tb_produto.id where status_chamado = 2;
+CREATE VIEW `vwfaturamento` AS
+SELECT SUM(tb_produto.preco) FROM tb_click_produto JOIN tb_produto ON fk_produto = tb_produto.id
+WHERE possivel_compra = 0 AND data_hora_click >= DATE_SUB(NOW(), INTERVAL 7 DAY);
+--
 select * from vwfaturamento;
-
 -- view corrigida
-create view `vwacessossetedias` as
-select qtd,id from (
-select 
-status_chamado,
+CREATE VIEW `vwacessossetedias` AS
+SELECT qtd,id FROM (
+SELECT
+possivel_compra,
 id,
-count(status_chamado) as qtd
-from tb_produto_chamado where status_chamado = 2
-and data_hora_fechamento < date_sub(now(), interval 7 day)
-group by status_chamado,id
-) as viz order by status_chamado;
+COUNT(possivel_compra) AS qtd
+FROM tb_click_produto WHERE possivel_compra =0
+AND data_hora_click < DATE_SUB(NOW(), INTERVAL 7 DAY)
+GROUP BY possivel_compra,id
+) AS viz ORDER BY possivel_compra;
+--
 select * from vwacessossetedias;
-
 -- view corrigida
-create view `vwtaxaretorno` as
-select tb_usuario.id as id,tb_usuario.nome as usuario,count(tb_click_produto.data_hora_click) as cliques from tb_click_produto
-join tb_usuario on fk_usuario = tb_usuario.id group by tb_usuario.id having cliques > 1 order by cliques desc;
-
+CREATE VIEW `vwtaxaretorno` AS
+SELECT tb_usuario.id AS id,tb_usuario.nome AS usuario,COUNT(tb_click_produto.data_hora_click) AS cliques FROM tb_click_produto
+JOIN tb_usuario ON fk_usuario = tb_usuario.id GROUP BY tb_usuario.id HAVING cliques > 1 ORDER BY cliques DESC;
+--
 select * from vwtaxaretorno;
 -- Procedures ---------------------------------------------------------
 DELIMITER //
