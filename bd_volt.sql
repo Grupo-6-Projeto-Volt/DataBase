@@ -357,14 +357,30 @@ FROM tb_click_produto JOIN tb_produto ON fk_produto = tb_produto.id JOIN tb_cate
 categoria,tb_categoria.id;
 --
 select * from vwcategoriasacessos;
+
 -- view corrigida
-CREATE VIEW `vwprodutosmaisacessados` AS
+create view  `vwprodutosmaisacessados` as
+SELECT 
+    p.id AS id,
+    p.qtd_estoque AS qtd,
+    p.nome,
+    COUNT(cp.data_hora_click) AS acessos,
+    (SELECT tb_imagem_produto.codigo_imagem
+     FROM tb_imagem_produto
+     WHERE tb_imagem_produto.fk_produto = p.id
+     LIMIT 1) AS url
+FROM tb_produto p
+JOIN tb_click_produto AS cp ON p.id = cp.fk_produto
+GROUP BY id, qtd_estoque, p.nome
+ORDER BY acessos DESC
+LIMIT 6;
+/*CREATE VIEW `vwprodutosmaisacessados` AS
 SELECT tb_produto.id AS id, tb_produto.qtd_estoque AS qtd,tb_produto.nome,
 count(data_hora_click) AS acessos,tb_imagem_produto.codigo_imagem AS url
 FROM tb_produto JOIN tb_click_produto ON tb_produto.id = fk_produto 
 JOIN tb_imagem_produto ON tb_imagem_produto.fk_produto = tb_produto.id
 AND tb_imagem_produto.indice_vt = 0 GROUP BY nome, qtd, id, url 
-ORDER BY acessos DESC LIMIT 7; 
+ORDER BY acessos DESC LIMIT 7; */
 --
 select * from vwprodutosmaisacessados;
 --
