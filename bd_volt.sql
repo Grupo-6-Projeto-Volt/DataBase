@@ -401,13 +401,13 @@ select * from vwprodutosmaisacessados;
 -- view corrigida
 CREATE VIEW `vwfaturamento` AS
 SELECT 
-	SUM(tb_produto.preco)
+	tb_produto.preco as preco,
+    data_hora_click
 FROM tb_click_produto 
 JOIN tb_produto ON fk_produto = tb_produto.id
-WHERE possivel_compra = 0 
-	AND data_hora_click >= DATE_SUB(NOW(), INTERVAL 7 DAY);
+WHERE possivel_compra = 0;
 --
-select * from vwfaturamento;
+select SUM(preco) as faturamento from vwfaturamento where DATE(data_hora_click) between DATE_SUB('2024-04-10', INTERVAL 7 DAY) AND '2024-04-10';
 -- view corrigida
 CREATE VIEW `vwacessossetedias` AS
 SELECT data_hora_click, id FROM (
