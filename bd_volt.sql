@@ -410,17 +410,16 @@ WHERE possivel_compra = 0
 select * from vwfaturamento;
 -- view corrigida
 CREATE VIEW `vwacessossetedias` AS
-SELECT qtd,id FROM (
+SELECT data_hora_click, id FROM (
 	SELECT
 		possivel_compra,
 		id,
-		COUNT(possivel_compra) AS qtd
+        data_hora_click
 	FROM tb_click_produto WHERE possivel_compra = 0
-		AND data_hora_click < DATE_SUB(NOW(), INTERVAL 7 DAY)
 	GROUP BY possivel_compra, id
-) AS viz ORDER BY possivel_compra;
+) AS viz;
 --
-select * from vwacessossetedias;
+select COUNT(data_hora_click) as qtd from vwacessossetedias where DATE(data_hora_click) between DATE_SUB('2024-09-28', INTERVAL 7 DAY) AND '2024-09-28';
 -- view corrigida
 CREATE VIEW `vwtaxaretorno` AS
 SELECT 
@@ -430,12 +429,12 @@ SELECT
 FROM tb_click_produto
 	JOIN tb_usuario ON fk_usuario = tb_usuario.id;
 --
-SELECT 
+ SELECT 
 	id, 
-	usuario, 
-	COUNT(data_hora_click) AS clicks 
+    usuario, 
+    COUNT(data_hora_click) AS clicks 
 FROM vwtaxaretorno
-WHERE DATE(data_hora_click) = '2024-04-03'
+WHERE DATE(data_hora_click) = '2024-04-01'
 GROUP BY id HAVING clicks > 1 
 ORDER BY clicks DESC;
 -- Procedures ---------------------------------------------------------
