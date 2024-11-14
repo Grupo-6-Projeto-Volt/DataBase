@@ -359,9 +359,14 @@ select * from tb_imagem_produto;
 --
 -- view corrigida
 CREATE VIEW `vwcategoriasacessos` AS
-SELECT DENSE_RANK() OVER (ORDER BY tb_categoria.id) AS id, count(data_hora_click) AS acessos, tb_categoria.nome AS categoria
-FROM tb_click_produto JOIN tb_produto ON fk_produto = tb_produto.id JOIN tb_categoria ON fk_categoria = tb_categoria.id GROUP BY
-categoria,tb_categoria.id;
+SELECT 
+	DENSE_RANK() OVER (ORDER BY tb_categoria.id) AS id, 
+	count(data_hora_click) AS acessos, 
+    tb_categoria.nome AS categoria
+FROM tb_click_produto 
+	JOIN tb_produto ON fk_produto = tb_produto.id 
+	JOIN tb_categoria ON fk_categoria = tb_categoria.id 
+GROUP BY categoria,tb_categoria.id;
 --
 select * from vwcategoriasacessos;
 
@@ -395,29 +400,44 @@ select * from vwprodutosmaisacessados;
 --
 -- view corrigida
 CREATE VIEW `vwfaturamento` AS
-SELECT SUM(tb_produto.preco) FROM tb_click_produto JOIN tb_produto ON fk_produto = tb_produto.id
-WHERE possivel_compra = 0 AND data_hora_click >= DATE_SUB(NOW(), INTERVAL 7 DAY);
+SELECT 
+	SUM(tb_produto.preco)
+FROM tb_click_produto 
+JOIN tb_produto ON fk_produto = tb_produto.id
+WHERE possivel_compra = 0 
+	AND data_hora_click >= DATE_SUB(NOW(), INTERVAL 7 DAY);
 --
 select * from vwfaturamento;
 -- view corrigida
 CREATE VIEW `vwacessossetedias` AS
 SELECT qtd,id FROM (
-SELECT
-possivel_compra,
-id,
-COUNT(possivel_compra) AS qtd
-FROM tb_click_produto WHERE possivel_compra =0
-AND data_hora_click < DATE_SUB(NOW(), INTERVAL 7 DAY)
-GROUP BY possivel_compra,id
+	SELECT
+		possivel_compra,
+		id,
+		COUNT(possivel_compra) AS qtd
+	FROM tb_click_produto WHERE possivel_compra = 0
+		AND data_hora_click < DATE_SUB(NOW(), INTERVAL 7 DAY)
+	GROUP BY possivel_compra, id
 ) AS viz ORDER BY possivel_compra;
 --
 select * from vwacessossetedias;
 -- view corrigida
 CREATE VIEW `vwtaxaretorno` AS
-SELECT tb_usuario.id AS id,tb_usuario.nome AS usuario,COUNT(tb_click_produto.data_hora_click) AS cliques FROM tb_click_produto
-JOIN tb_usuario ON fk_usuario = tb_usuario.id GROUP BY tb_usuario.id HAVING cliques > 1 ORDER BY cliques DESC;
+SELECT 
+	tb_usuario.id AS id,
+    tb_usuario.nome AS usuario,
+    tb_click_produto.data_hora_click
+FROM tb_click_produto
+	JOIN tb_usuario ON fk_usuario = tb_usuario.id;
 --
-select * from vwtaxaretorno;
+SELECT 
+	id, 
+	usuario, 
+	COUNT(data_hora_click) AS clicks 
+FROM vwtaxaretorno
+WHERE DATE(data_hora_click) = '2024-04-03'
+GROUP BY id HAVING clicks > 1 
+ORDER BY clicks DESC;
 -- Procedures ---------------------------------------------------------
 DELIMITER //
 CREATE function `fnRemoveAccents`(`str` TEXT)
