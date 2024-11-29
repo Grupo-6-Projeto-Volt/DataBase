@@ -253,7 +253,7 @@ INSERT INTO tb_click_produto (data_hora_click, possivel_compra, fk_usuario, fk_p
 ('2024-04-03 16:00:00', 0, 7, 1),
 ('2024-04-03 17:00:00', 1, 8, 2),
 ('2024-04-03 18:00:00', 0, 9, 10),
-('2024-04-04 19:00:00', 1, 10, 10);
+('2024-11-20 19:00:00', 1, 10, 10);
 
 -- Inserts novos com os dados do web scraping
 INSERT INTO tb_click_produto (data_hora_click,possivel_compra,fk_usuario,fk_produto) VALUES
@@ -343,27 +343,25 @@ select * from tb_classificacao_produto;
 select * from tb_favoritos;
 select * from tb_imagem_produto;
 -- Views --------------------------------------------------------------
--- View de chamados descontinuada
--- create view `vwchamadosgrafico` as 
--- select qtd, dia, mes, id,status_chamado as status from (
--- select 
--- id,
--- status_chamado,
--- count(status_chamado) as qtd, 
--- DATE_FORMAT(data_hora_abertura, '%d') as dia,
--- DATE_FORMAT(data_hora_abertura, '%m') as mes
--- from tb_produto_chamado where status_chamado >= 1
--- and data_hora_abertura >= date_sub(now(), interval 6 month)
--- group by dia, mes, status_chamado,id
--- ) as viz order by status_chamado;
 --
 -- view corrigida
 CREATE VIEW `vwcategoriasacessos` AS
-SELECT DENSE_RANK() OVER (ORDER BY tb_categoria.id) AS id, count(data_hora_click) AS acessos, tb_categoria.nome AS categoria
-FROM tb_click_produto JOIN tb_produto ON fk_produto = tb_produto.id JOIN tb_categoria ON fk_categoria = tb_categoria.id GROUP BY
-categoria,tb_categoria.id;
+SELECT 
+	DENSE_RANK() OVER (ORDER BY tb_categoria.id) AS id, 
+	DATE(data_hora_click) AS dataClick, 
+    tb_categoria.nome AS categoria
+FROM tb_click_produto 
+	JOIN tb_produto ON fk_produto = tb_produto.id 
+	JOIN tb_categoria ON fk_categoria = tb_categoria.id;
 --
-select * from vwcategoriasacessos;
+SELECT 
+	id, 
+    COUNT(dataClick) AS acessos, 
+    categoria 
+FROM vwcategoriasacessos 
+WHERE dataClick = '2024-04-01'
+GROUP BY categoria, id
+ORDER BY acessos DESC;
 
 -- view corrigida
 create view  `vwprodutosmaisacessados` as
@@ -371,53 +369,75 @@ SELECT
     p.id AS id,
     p.qtd_estoque AS qtd,
     p.nome,
-    COUNT(cp.data_hora_click) AS acessos,
+    DATE(cp.data_hora_click) AS dataClick,
     (SELECT tb_imagem_produto.codigo_imagem
      FROM tb_imagem_produto
      WHERE tb_imagem_produto.fk_produto = p.id
      LIMIT 1) AS url
 FROM tb_produto p
-JOIN tb_click_produto AS cp ON p.id = cp.fk_produto
-GROUP BY id, qtd_estoque, p.nome
-ORDER BY acessos DESC
-LIMIT 6;
-/*CREATE VIEW `vwprodutosmaisacessados` AS
-SELECT tb_produto.id AS id, tb_produto.qtd_estoque AS qtd,tb_produto.nome,
-count(data_hora_click) AS acessos,tb_imagem_produto.codigo_imagem AS url
-FROM tb_produto JOIN tb_click_produto ON tb_produto.id = fk_produto 
-JOIN tb_imagem_produto ON tb_imagem_produto.fk_produto = tb_produto.id
-AND tb_imagem_produto.indice_vt = 0 GROUP BY nome, qtd, id, url 
-ORDER BY acessos DESC LIMIT 7; */
+JOIN tb_click_produto AS cp ON p.id = cp.fk_produto;
 --
-select * from vwprodutosmaisacessados;
+SELECT
+	id,
+    qtd,
+    nome,
+    COUNT(dataClick) as acessos,
+    url
+FROM vwprodutosmaisacessados
+where dataClick = '2024-04-04'
+GROUP BY id, qtd, nome
+ORDER BY dataClick DESC
+LIMIT 7;
 --
 -- kpis
 --
 -- view corrigida
 CREATE VIEW `vwfaturamento` AS
-SELECT SUM(tb_produto.preco) FROM tb_click_produto JOIN tb_produto ON fk_produto = tb_produto.id
-WHERE possivel_compra = 0 AND data_hora_click >= DATE_SUB(NOW(), INTERVAL 7 DAY);
+SELECT 
+	tb_produto.preco AS preco,
+    DATE(data_hora_click) AS dataClick
+FROM tb_click_produto 
+JOIN tb_produto ON fk_produto = tb_produto.id
+WHERE possivel_compra = 0;
 --
-select * from vwfaturamento;
+SELECT 
+	SUM(preco) AS faturamento
+FROM vwfaturamento 
+WHERE dataClick BETWEEN DATE_SUB('2024-04-10', INTERVAL 7 DAY) AND '2024-04-10';
 -- view corrigida
 CREATE VIEW `vwacessossetedias` AS
-SELECT qtd,id FROM (
-SELECT
-possivel_compra,
-id,
-COUNT(possivel_compra) AS qtd
-FROM tb_click_produto WHERE possivel_compra =0
-AND data_hora_click < DATE_SUB(NOW(), INTERVAL 7 DAY)
-GROUP BY possivel_compra,id
-) AS viz ORDER BY possivel_compra;
+SELECT dataClick, id FROM (
+	SELECT
+		possivel_compra,
+		id,
+        DATE(data_hora_click) AS dataClick
+	FROM tb_click_produto WHERE possivel_compra = 0
+	GROUP BY possivel_compra, id
+) AS viz;
 --
-select * from vwacessossetedias;
+SELECT 
+	COUNT(dataClick) AS qtd,
+    id
+FROM vwacessossetedias 
+WHERE dataClick BETWEEN DATE_SUB('2024-09-28', INTERVAL 7 DAY) AND '2024-09-28'
+GROUP BY id;
 -- view corrigida
 CREATE VIEW `vwtaxaretorno` AS
-SELECT tb_usuario.id AS id,tb_usuario.nome AS usuario,COUNT(tb_click_produto.data_hora_click) AS cliques FROM tb_click_produto
-JOIN tb_usuario ON fk_usuario = tb_usuario.id GROUP BY tb_usuario.id HAVING cliques > 1 ORDER BY cliques DESC;
+SELECT 
+	tb_usuario.id AS id,
+    tb_usuario.nome AS usuario,
+    DATE(tb_click_produto.data_hora_click) as dataClick
+FROM tb_click_produto
+	JOIN tb_usuario ON fk_usuario = tb_usuario.id;
 --
-select * from vwtaxaretorno;
+SELECT 
+	id, 
+    usuario, 
+    COUNT(dataClick) AS clicks 
+FROM vwtaxaretorno
+WHERE dataClick = '2024-04-01'
+GROUP BY id HAVING clicks > 1 
+ORDER BY clicks DESC;
 -- Procedures ---------------------------------------------------------
 DELIMITER //
 CREATE function `fnRemoveAccents`(`str` TEXT)
