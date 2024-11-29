@@ -253,7 +253,7 @@ INSERT INTO tb_click_produto (data_hora_click, possivel_compra, fk_usuario, fk_p
 ('2024-04-03 16:00:00', 0, 7, 1),
 ('2024-04-03 17:00:00', 1, 8, 2),
 ('2024-04-03 18:00:00', 0, 9, 10),
-('2024-04-04 19:00:00', 1, 10, 10);
+('2024-11-20 19:00:00', 1, 10, 10);
 
 -- Inserts novos com os dados do web scraping
 INSERT INTO tb_click_produto (data_hora_click,possivel_compra,fk_usuario,fk_produto) VALUES
@@ -416,9 +416,11 @@ SELECT dataClick, id FROM (
 ) AS viz;
 --
 SELECT 
-	COUNT(dataClick) AS qtd
+	COUNT(dataClick) AS qtd,
+    id
 FROM vwacessossetedias 
-WHERE dataClick BETWEEN DATE_SUB('2024-09-28', INTERVAL 7 DAY) AND '2024-09-28';
+WHERE dataClick BETWEEN DATE_SUB('2024-09-28', INTERVAL 7 DAY) AND '2024-09-28'
+GROUP BY id;
 -- view corrigida
 CREATE VIEW `vwtaxaretorno` AS
 SELECT 
