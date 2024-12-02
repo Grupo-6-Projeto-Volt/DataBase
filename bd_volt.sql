@@ -1,145 +1,128 @@
-drop database if exists bd_volt;
+-- Criação do Banco --------------------------------------------------
+DROP DATABASE IF EXISTS bd_volt;
+
 CREATE DATABASE IF NOT EXISTS bd_volt
     CHARACTER SET utf8mb4
     COLLATE utf8mb4_unicode_ci;
 
--- ALTER DATABASE bd_volt 
--- CHARACTER SET = utf8mb4 
--- COLLATE = utf8mb4_unicode_ci;    
-
 USE bd_volt;
 
 -- Tabelas --------------------------------------------------
-
--- Usuario
-create table if not exists tb_usuario 
+-- Tabela Usuario
+CREATE TABLE IF NOT EXISTS tb_usuario 
 (
-	id int primary key auto_increment,
-	nome varchar(100) not null,
-	email varchar(100) not null unique,
-	telefone varchar(14) not null unique,
-	categoria tinyint(1)
+	id INT PRIMARY KEY AUTO_INCREMENT,
+	nome VARCHAR(100) NOT NULL,
+	email VARCHAR(100) NOT NULL UNIQUE,
+	telefone VARCHAR(14) NOT NULL UNIQUE,
+	categoria TINYINT(1)
 );
 
--- Login
-create table if not exists tb_login
+-- Tabela Login
+CREATE TABLE IF NOT EXISTS tb_login
 (
-	id VARCHAR(36) primary key,
-	email varchar(255) unique,
-	senha varchar(255) not null unique,
-	fk_usuario int,
-	foreign key(fk_usuario) references tb_usuario(id)
-    on delete cascade
+	id VARCHAR(36) PRIMARY KEY,
+	email VARCHAR(255) UNIQUE,
+	senha VARCHAR(255) NOT NULL UNIQUE,
+	fk_usuario INT,
+	FOREIGN KEY(fk_usuario) REFERENCES tb_usuario(id)
+    ON DELETE CASCADE
 ); 
 
--- Categoria
-create table if not exists tb_categoria
+-- Tabela Categoria
+CREATE TABLE IF NOT EXISTS tb_categoria
 (
-	id int primary key auto_increment,
-    nome varchar(30)
+	id INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(30)
 );
 
--- Produto
-create table if not exists tb_produto
+-- Tabela Produto
+CREATE TABLE IF NOT EXISTS tb_produto
 (
-	id int primary key auto_increment,
-	nome varchar(120) not null,
-	descricao varchar(400) not null,
-	fk_categoria int,
-    foreign key(fk_categoria) references tb_categoria(id)
-    on delete cascade,
-	preco decimal(8,2) not null,
-	qtd_estoque int,
-    estado_geral varchar(45) not null,
-    desconto int,
-    data_inicio_desconto date,
-    data_fim_desconto date
+	id INT PRIMARY KEY AUTO_INCREMENT,
+	nome VARCHAR(120) NOT NULL,
+	descricao VARCHAR(400) NOT NULL,
+	fk_categoria INT,
+    FOREIGN KEY(fk_categoria) REFERENCES tb_categoria(id)
+    ON DELETE CASCADE,
+	preco DECIMAL(8,2) NOT NULL,
+	qtd_estoque INT,
+    estado_geral VARCHAR(45) NOT NULL,
+    desconto INT,
+    data_inicio_desconto DATE,
+    data_fim_desconto DATE
 )CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
--- Cor produto
-create table if not exists tb_cor_produto
+-- Tabela Cor produto
+CREATE TABLE IF NOT EXISTS tb_cor_produto
 (
-	id int primary key auto_increment,
-    nome varchar(40),
-    hex_id char(7),
-	fk_produto int,
-    foreign key(fk_produto) references tb_produto(id)
-    on delete cascade
+	id INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(40),
+    hex_id CHAR(7),
+	fk_produto INT,
+    FOREIGN KEY(fk_produto) REFERENCES tb_produto(id)
+    ON DELETE CASCADE
 );
 
--- Imagem produto
-create table if not exists tb_imagem_produto
+-- Tabela Imagem Produto
+CREATE TABLE IF NOT EXISTS tb_imagem_produto
 (
-	id int primary key auto_increment,
-	nome varchar(100),
-	codigo_imagem blob,
-	indice_vt int,
-	fk_produto int,
-	foreign key(fk_produto) references tb_produto(id)
-    on delete cascade
+	id INT PRIMARY KEY AUTO_INCREMENT,
+	nome VARCHAR(100),
+	codigo_imagem BLOB,
+	indice_vt INT,
+	fk_produto INT,
+	FOREIGN KEY(fk_produto) REFERENCES tb_produto(id)
+    ON DELETE CASCADE
 );
 
--- Clique produto
-create table if not exists tb_click_produto
+-- Tabela Clique Produto
+CREATE TABLE IF NOT EXISTS tb_click_produto
 (
-	id int primary key auto_increment,
-	data_hora_click datetime,
-	possivel_compra tinyint(1),
-	fk_usuario int,
-	foreign key(fk_usuario) references tb_usuario(id)
-	on delete set null,
-	fk_produto int,
-	foreign key(fk_produto) references tb_produto(id)
-    on delete cascade
+	id INT PRIMARY KEY AUTO_INCREMENT,
+	data_hora_click DATETIME,
+	possivel_compra TINYINT(1),
+	fk_usuario INT,
+	FOREIGN KEY(fk_usuario) REFERENCES tb_usuario(id)
+	ON DELETE SET NULL,
+	fk_produto INT,
+	FOREIGN KEY(fk_produto) REFERENCES tb_produto(id)
+    ON DELETE CASCADE
 );
 
--- Tag produto
-create table if not exists tb_tag_produto
+-- Tabela Tag Produto
+CREATE TABLE IF NOT EXISTS tb_tag_produto
 (
-	id int primary key auto_increment,
-	tag varchar(50)
+	id INT PRIMARY KEY AUTO_INCREMENT,
+	tag VARCHAR(50)
 );
 
--- Classificação produto
-create table if not exists tb_classificacao_produto
+-- Tabela Classificação Produto
+CREATE TABLE IF NOT EXISTS tb_classificacao_produto
 (
-	id int primary key auto_increment,
-	fk_tag_produto int,
-	foreign key(fk_tag_produto) references tb_tag_produto(id)
-    on delete set null,
-	fk_produto int,
-	foreign key(fk_produto) references tb_produto(id)
-    on delete cascade
+	id INT PRIMARY KEY AUTO_INCREMENT,
+	fk_tag_produto INT,
+	FOREIGN KEY(fk_tag_produto) REFERENCES tb_tag_produto(id)
+    ON DELETE SET NULL,
+	fk_produto INT,
+	FOREIGN KEY(fk_produto) REFERENCES tb_produto(id)
+    ON DELETE CASCADE
 );
 
-create table if not exists tb_favoritos
+-- Tabela Favoritos
+CREATE TABLE IF NOT EXISTS tb_favoritos
 (
-	id int primary key auto_increment,
-    dt_hora_insercao datetime,
-    fk_usuario int,
-    foreign key(fk_usuario) references tb_usuario(id)
-    on delete cascade,
-	fk_produto int,
-    foreign key(fk_produto) references tb_produto(id)
-    on delete cascade
-);
-
-create table if not exists tb_produto_chamado
-(
-	id int primary key auto_increment,
-    status_chamado tinyint(2) not null,
-    data_hora_abertura datetime not null,
-    data_hora_fechamento datetime,
-	fk_usuario int,
-	foreign key(fk_usuario) references tb_usuario(id)
-    on delete cascade,
-	fk_produto int,
-	foreign key(fk_produto) references tb_produto(id)
-    on delete cascade
+	id INT PRIMARY KEY AUTO_INCREMENT,
+    dt_hora_insercao DATETIME,
+    fk_usuario INT,
+    FOREIGN KEY(fk_usuario) REFERENCES tb_usuario(id)
+    ON DELETE CASCADE,
+	fk_produto INT,
+    FOREIGN KEY(fk_produto) REFERENCES tb_produto(id)
+    ON DELETE CASCADE
 );
 
 -- Inserts ------------------------------------------------------------
-
 -- Inserts para tabela tb_usuario
 INSERT INTO tb_usuario (nome, email, telefone, categoria) VALUES
 ('João Silva', 'joao@example.com', '123456789', 0),
@@ -169,7 +152,7 @@ INSERT INTO tb_login (id, email, senha, fk_usuario) VALUES
 (UUID(), 'admin@gmail.com', '$2a$10$lF/NWmArt98gcVjt1BHzTOhb8zN1MQZ626aSJwIRZcGo2SEWOrT9i', 11);
 
 -- Insert para tabela tb_categoria
-INSERT INTO tb_categoria(nome) VALUES
+INSERT INTO tb_categoria (nome) VALUES
 ('Computador'),
 ('Celular'),
 ('Acessório'),
@@ -177,108 +160,26 @@ INSERT INTO tb_categoria(nome) VALUES
 
 -- Inserts para tabela tb_produto
 INSERT INTO tb_produto (nome, descricao, fk_categoria, preco, qtd_estoque, estado_geral, desconto, data_inicio_desconto, data_fim_desconto) VALUES
-('Notebook Dell Inspiron 15', 'Notebook Dell Inspiron 15 com tela de 15,6 polegadas, processador Intel Core i5, 8GB de RAM e 256GB de SSD. Ideal para produtividade e entretenimento, com design elegante e bateria de longa duração.', 1, 2500.00, 10, 'Novo', 15, '2024-09-10', '2024-09-20'),
-('Smartphone Samsung Galaxy S21', 'Smartphone Samsung Galaxy S21 com câmera tripla de 64MP, tela de 6,2 polegadas AMOLED, 128GB de armazenamento interno e 8GB de RAM. Ótima performance para jogos e multitarefas.', 2, 1800.00, 15, 'Semi novo', 4, NULL, NULL),
-('Teclado Mecânico Gamer Husky Gaming Blizzard', 'Teclado mecânico para jogos com switches Gateron, iluminação RGB personalizável e design ergonômico. Ideal para jogadores que buscam precisão e durabilidade.', 3, 150.00, 20, 'Novo', 0, NULL, NULL),
-('Mouse Gamer Logitech G203 LIGHTSYNC RGB', 'Mouse gamer com sensor óptico de alta precisão, 6 botões programáveis e DPI ajustável até 7200. Design confortável para longas sessões de jogo.', 3, 80.00, 30, 'Semi novo', 0, NULL, NULL),
-('Monitor PCFort Gamer H238F165 23.8'' Led Full Hd 165hz Freesync Hdmi Display Port VESA', 'Monitor LG UltraWide de 29 polegadas com resolução Full HD, taxa de atualização de 75Hz e tecnologia AMD FreeSync. Perfeito para produtividade e jogos imersivos.', 3, 600.00, 5, 'Novo', 10, '2024-09-08', '2024-09-18'),
-('Apple iPhone 13 (128 GB)', 'Smartphone Apple iPhone 13 com câmera dupla de 12MP, gravação em 4K, 128GB de armazenamento e processador A15 Bionic. Excelente para fotos, vídeos e desempenho multitarefa.', 2, 2000.00, 12, 'Novo', 7, '2024-09-15', '2024-09-25'),
-('QCY H2 PRO Fone de Ouvido Bluetooth', 'Headset Bluetooth JBL com som estéreo de alta qualidade, até 20 horas de duração de bateria e microfone integrado para chamadas nítidas.', 3, 120.00, 25, 'Semi novo', 10, NULL, NULL),
-('JBL Partybox 110', 'Caixa de som JBL Partybox Encore Essential com 100W de potência, luzes LED integradas e bateria recarregável com até 6 horas de autonomia. Ideal para festas e eventos.', 4, 1500.00, 11, 'Semi novo', 0, NULL, NULL),
-('Câmera digital Canon EOS Rebel T7', 'Câmera digital Canon EOS Rebel T7 com sensor CMOS de 24.1MP, gravação de vídeos em Full HD, e conectividade Wi-Fi para compartilhamento rápido de fotos e vídeos.', 3, 700.00, 8, 'Novo', 12, NULL, NULL),
-('Notebook HP Pavilion 14', 'Notebook HP Pavilion 14 com processador Intel Core i7, 16GB de RAM e 512GB de SSD. Equipado com tela Full HD e ótimo desempenho para tarefas profissionais e de entretenimento.', 1, 1800.00, 10, 'Semi novo', 5, NULL, NULL);
-
+("iPhone 15 Pro", "O iPhone 15 Pro é o primeiro iPhone a apresentar um design de titânio de grau aeroespacial, usando a mesma ligação que as naves espaciais que usam para missões à Marte", 2, 7699.00, 10, "Novo", 0, NULL, NULL),
+("iPhone 14 Pro Max", "O iPhone 14 tem o sistema de câmera dupla mais impressionante em um iPhone, para fazer fotos espetaculares em pouca e muita luz.", 2, 4799.00, 10, "Novo", 0, NULL, NULL),
+("iPhone 13 Pro", "Aparelho De Vitrine - Sem Uso! Desbloqueado, Sem Detalhes Ou Marcas, Com Saúde Da Bateria Superior A 85%. 3 meses de garantia.", 2, 4599.00, 10, "Seminovo", 0, NULL, NULL),
+("iPhone 13 Pro Max", "Produto 100% Original. Aparência Impecável. Bateria 85%- 100%. 3 meses de garantia.", 2, 5599.99, 10, "Seminovo", 0, NULL, NULL),
+("iPhone 12 Pro", "iPhone 12 Pro. 5G para baixar arquivos enormes em qualquer lugar e fazer streaming de vídeos HDR. 3 meses de garantia.", 2, 3799.99, 10, "Seminovo", 0, NULL, NULL),
+("AirPods 2", "AirPods 2 com cancelamento de ruído. Possibilidade de recarregar o estojo com um conector lightning. Até 5 horas de áudio com apenas uma recarga.", 3, 1787.56, 10, "Novo", 0, NULL, NULL),
+("AirTag", "AirTag compatível com iPhone e iPad iOS 14.5 ou superior. Resistente à água, respingos e poeira. Bateria substituível e dura mais de um ano.", 3, 348.00, 10, "Novo", 0, NULL, NULL),
+("Apple Watch Series 9", "Nosso chip mais poderoso do Apple Watch de todos os tempos. Uma tela que é duas vezes mais brilhante.", 3, 3749.00, 10, "Novo", 0, NULL, NULL),
+("Smartphone Realme C61", "Apresentamos o Smartphone Realme C61, um dispositivo que combina desempenho robusto e estilo sofisticado. Tela Ips Lcd de 6.74 polegadas. Taxa de atualização de 90hz.", 2, 1165.00, 10, "Seminovo", 0, NULL, NULL);
 -- Inserts para tabela tb_cor_produto
-INSERT INTO tb_cor_produto (nome, hex_id, fk_produto) VALUES
-('Preto', '#000000', 1),     -- Produto 1 com cor preta
-('Branco', '#FFFFFF', 1),    -- Produto 1 com cor branca
-('Vermelho', '#FF0000', 2),  -- Produto 2 com cor vermelha
-('Preto', '#000000', 2),     -- Produto 2 com cor preta
-('Verde', '#00FF00', 3),     -- Produto 3 com cor verde
-('Azul', '#0000FF', 4),      -- Produto 4 com cor azul
-('Amarelo', '#FFFF00', 4),   -- Produto 4 com cor amarela
-('Magenta', '#FF00FF', 5),   -- Produto 5 com cor magenta
-('Ciano', '#00FFFF', 6),     -- Produto 6 com cor ciano
-('Cinza', '#808080', 7),     -- Produto 7 com cor cinza
-('Prata', '#C0C0C0', 8),     -- Produto 8 com cor prata
-('Laranja', '#FFA500', 9),   -- Produto 9 com cor laranja
-('Roxo', '#800080', 10),     -- Produto 10 com cor roxa
-('Marrom', '#8B4513', 10),   -- Produto 10 com cor marrom
-('Azul Aço', '#4682B4', 9),  -- Produto 9 com cor azul aço
-('Dourado', '#FFD700', 8),   -- Produto 8 com cor dourada
-('Azul Marinho', '#000080', 7); -- Produto 7 com cor azul marinho
-
+-- INSERT INTO tb_cor_produto (nome, hex_id, fk_produto) VALUES
+-- ();
 
 -- Inserts para tabela tb_imagem_produto
-INSERT INTO tb_imagem_produto (nome, codigo_imagem, indice_vt, fk_produto) VALUES
-('Imagem Notebook Dell frente', 'https://imgs.casasbahia.com.br/55065342/1g.jpg', 0, 1),
-('Imagem Notebook Dell lado', 'https://imgs.casasbahia.com.br/55065342/7g.jpg', 1, 1),
-('Imagem Notebook Dell atras', 'https://imgs.casasbahia.com.br/55065342/6g.jpg', 2, 1),
-('Imagem Smartphone Samsung frente', 'https://imgs.casasbahia.com.br/55065328/1g.jpg', 0, 2),
-('Imagem Smartphone Samsung lado', 'https://imgs.casasbahia.com.br/55065328/2g.jpg', 1, 2),
-('Imagem Teclado mecânico frente', 'https://images.kabum.com.br/produtos/fotos/163971/teclado-mecanico-gamer-husky-gaming-blizzard-rgb-switch-gateron-blue-abnt2-branco-hgmo022_1635794160_gg.jpg', 0, 3),
-('Imagem Teclado mecânico atras', 'https://resetai.com.br/wp-content/uploads/2022/09/Teclado-Mecanico-Motospeed-CK62-1024x511.png', 1, 3),
-('Imagem Mouse gamer frente', 'https://images.kabum.com.br/produtos/fotos/112948/mouse-gamer-logitech-g203-rgb-lightsync-6-botoes-8000-dpi-preto-910-005793_1612880275_g.jpg', 0, 4),
-('Imagem Monitor PCFort frente', 'https://images.tcdn.com.br/img/img_prod/740836/monitor_gamer_pcfort_t2701_165_27_led_full_hd_165hz_display_port_hdmi_dvi_vesa_13891_1_41f110c369e18c77abe42f0bfbe24480.jpg', 0, 5),
-('Imagem Monitor PCFort lado', 'https://images.tcdn.com.br/img/img_prod/740836/monitor_gamer_pcfort_t2701_165_27_led_full_hd_165hz_display_port_hdmi_dvi_vesa_13891_3_883a52e740b1f8d2f5cd7c7cb7d3b383.jpg', 1, 5),
-('Imagem Monitor PCFort detalhe', 'https://images.tcdn.com.br/img/img_prod/740836/90_monitor_gamer_pcfort_t2701_165_27_led_full_hd_165hz_display_port_hdmi_dvi_vesa_13891_4_1f6b1005568d2b5888a9ba6e8920b578.jpg', 2, 5),
-('Imagem Monitor PCFort atras', 'https://images.tcdn.com.br/img/img_prod/740836/monitor_gamer_pcfort_t2701_165_27_led_full_hd_165hz_display_port_hdmi_dvi_vesa_13891_2_d5701fd63c3e1c7bc2fc2c9746d68233.jpg', 3, 5),
-('Imagem iPhone 13 frente', 'https://imgs.casasbahia.com.br/55048759/1g.jpg', 0, 6),
-('Imagem iPhone 13 detalhe', 'https://imgs.casasbahia.com.br/55048759/5g.jpg', 1, 6),
-('Imagem Headset Bluetooth frente', 'https://m.media-amazon.com/images/I/61dczD-S7iL._AC_UF1000,1000_QL80_.jpg', 0, 7),
-('Imagem JBL Partybox frente', 'https://m.media-amazon.com/images/I/51DIiBDMu0L._AC_SL1000_.jpg', 0, 8),
-('Imagem Câmera Canon frente', 'https://m.media-amazon.com/images/I/71Is-Zv6A0L._AC_SY450_.jpg', 0, 9),
-('Imagem Câmera Canon detalhe', 'https://m.media-amazon.com/images/I/71IepL5sXRL._AC_SY450_.jpg', 1, 9),
-('Imagem Câmera Canon lado', 'https://m.media-amazon.com/images/I/61BjZcbeZJL._AC_SY450_.jpg', 2, 9),
-('Imagem Notebook HP frente', 'https://i.zst.com.br/thumbs/12/5/16/-535963089.jpg', 0, 10);
+-- INSERT INTO tb_imagem_produto (nome, codigo_imagem, indice_vt, fk_produto) VALUES
+-- ();
 
 -- Inserts para tabela tb_click_produto
-INSERT INTO tb_click_produto (data_hora_click, possivel_compra, fk_usuario, fk_produto) VALUES
-('2024-04-01 10:00:00', 1, 1, 1),
-('2024-04-01 11:00:00', 1, 2, 2),
-('2024-04-01 12:00:00', 0, 3, 3),
-('2024-04-02 13:00:00', 1, 4, 4),
-('2024-04-02 14:00:00', 0, 5, 5),
-('2024-04-02 15:00:00', 1, 6, 6),
-('2024-04-03 16:00:00', 0, 7, 7),
-('2024-04-03 17:00:00', 1, 8, 8),
-('2024-04-03 18:00:00', 0, 9, 9),
-('2024-04-04 19:00:00', 1, 10, 10),
-('2024-04-01 10:00:00', 1, 1, 1),
-('2024-04-01 11:00:00', 1, 2, 1),
-('2024-04-01 12:00:00', 0, 3, 3),
-('2024-04-02 13:00:00', 1, 4, 2),
-('2024-04-02 14:00:00', 0, 5, 6),
-('2024-04-02 15:00:00', 1, 6, 9),
-('2024-04-03 16:00:00', 0, 7, 1),
-('2024-04-03 17:00:00', 1, 8, 2),
-('2024-04-03 18:00:00', 0, 9, 10),
-('2024-11-20 19:00:00', 1, 10, 10);
-
--- Inserts novos com os dados do web scraping
-INSERT INTO tb_click_produto (data_hora_click,possivel_compra,fk_usuario,fk_produto) VALUES
-('2024-09-25 18:00:00', 0, 1, 10);
--- ('2024-09-25 18:10:00', 0, 4, 12),
--- ('2024-09-25 18:20:00', 0, 1, 13),
--- ('2024-09-28 18:40:00', 0, 2, 150),
--- ('2024-09-28 18:40:00', 0, 5, 101),
--- ('2024-09-28 20:40:00', 0, 3, 24),
--- ('2024-09-30 20:50:00', 0, 11, 50),
--- ('2024-09-30 14:30:00', 0, 9, 12),
--- ('2024-09-30 10:40:00', 0, 6, 30),
--- ('2024-10-05 10:40:00', 0, 7, 33),
--- ('2024-10-08 10:0:00', 0, 7, 33),
--- ('2024-10-08 00:20:00', 0, 1, 20),
--- ('2024-10-18 13:25:00', 0, 9, 15),
--- ('2024-10-18 15:40:00', 0, 10, 49),
--- ('2024-10-20 22:00:00', 0, 8, 69),
--- ('2024-10-22 17:40:00', 0, 8, 12),
--- ('2024-10-25 16:40:00', 0, 8, 40),
--- ('2024-10-25 11:40:00', 0, 3, 90),
--- ('2024-10-25 21:40:00', 0, 4, 10),
--- ('2024-10-25 19:40:00', 0, 2, 7),
--- ('2024-10-25 10:40:00', 0, 5, 177);
--- 
+-- INSERT INTO tb_click_produto (data_hora_click, possivel_compra, fk_usuario, fk_produto) VALUES
+-- ();
 
 -- Inserts para tabela tb_tag_produto
 INSERT INTO tb_tag_produto (tag) VALUES
@@ -289,62 +190,15 @@ INSERT INTO tb_tag_produto (tag) VALUES
 ('Novidade');
 
 -- Inserts para tabela tb_classificacao_produto
-INSERT INTO tb_classificacao_produto (fk_produto, fk_tag_produto) VALUES
-(1, 1), -- Notebook Dell é uma oferta
-(2, 2), -- Smartphone Samsung é um lançamento
-(3, 3), -- Teclado mecânico é popular
-(4, 4), -- Mouse gamer é uma promoção
-(5, 5), -- Monitor LG é uma novidade
-(6, 1), -- iPhone 13 é uma oferta
-(7, 2), -- Headset Bluetooth é um lançamento
-(8, 3), -- Tablet Samsung é popular
-(9, 4), -- Câmera Canon é uma promoção
-(10, 5); -- Notebook HP é uma novidade
+-- INSERT INTO tb_classificacao_produto (fk_produto, fk_tag_produto) VALUES
+-- ();
 
 -- Inserts para tabela tb_favoritos
-INSERT INTO tb_favoritos (dt_hora_insercao, fk_usuario, fk_produto) VALUES
-('2024-04-12 08:00:00', 1, 2), -- Usuario 1, Produto 2
-('2024-04-12 08:10:00', 2, 4), -- Usuario 3, Produto 4
-('2024-04-12 08:20:00', 3, 6), -- Usuario 5, Produto 6
-('2024-04-12 08:30:00', 4, 8), -- Usuario 7, Produto 8
-('2024-04-12 08:40:00', 5, 10), -- Usuario 9, Produto 10
-('2024-04-12 08:50:00', 6, 1), -- Usuario 2, Produto 1
-('2024-04-12 09:00:00', 7, 3), -- Usuario 4, Produto 3
-('2024-04-12 09:10:00', 8, 5), -- Usuario 6, Produto 5
-('2024-04-12 09:20:00', 9, 7); -- Usuario 8, Produto 7
+-- INSERT INTO tb_favoritos (dt_hora_insercao, fk_usuario, fk_produto) VALUES
+-- ();
 
-INSERT INTO tb_favoritos (dt_hora_insercao, fk_usuario, fk_produto) VALUES
-('2024-04-12 09:30:00', 10, 2), -- Usuario 10, Produto 9
-('2024-04-12 09:30:00', 10, 4), -- Usuario 10, Produto 9
-('2024-04-12 09:30:00', 10, 5), -- Usuario 10, Produto 9
-('2024-04-12 09:30:00', 10, 9); -- Usuario 10, Produto 9
-
--- Inserts para tabela tb_produto_chamado
-INSERT INTO tb_produto_chamado (status_chamado, data_hora_abertura, fk_usuario, fk_produto) VALUES
-(0, '2024-04-12 10:00:00', 1, 2), -- Chamado aberto pelo usuário 1 para o produto 2
-(1, '2024-04-12 10:10:00', 3, 4), -- Chamado aberto pelo usuário 3 para o produto 4
-(2, '2024-04-12 10:20:00', 5, 6), -- Chamado aberto pelo usuário 5 para o produto 6
-(0, '2024-04-12 10:30:00', 7, 8), -- Chamado aberto pelo usuário 7 para o produto 8
-(1, '2024-04-12 10:40:00', 9, 10), -- Chamado aberto pelo usuário 9 para o produto 10
-(2, '2024-04-12 10:50:00', 2, 1), -- Chamado aberto pelo usuário 2 para o produto 1
-(0, '2024-04-12 11:00:00', 4, 3), -- Chamado aberto pelo usuário 4 para o produto 3
-(1, '2024-04-12 11:10:00', 6, 5), -- Chamado aberto pelo usuário 6 para o produto 5
-(2, '2024-04-12 11:20:00', 8, 7), -- Chamado aberto pelo usuário 8 para o produto 7
-(0, '2024-04-12 11:30:00', 10, 9); -- Chamado aberto pelo usuário 10 para o produto
-
--- Selects ------------------------------------------------------------
-select * from tb_usuario;
-select * from tb_login;
-select * from tb_produto;
-select * from tb_click_produto;
-select * from tb_imagem_produto;
-select * from tb_tag_produto;
-select * from tb_classificacao_produto;
-select * from tb_favoritos;
-select * from tb_imagem_produto;
 -- Views --------------------------------------------------------------
---
--- view corrigida
+-- View Acessos Categorias
 CREATE VIEW `vwcategoriasacessos` AS
 SELECT 
 	DENSE_RANK() OVER (ORDER BY tb_categoria.id) AS id, 
@@ -353,18 +207,9 @@ SELECT
 FROM tb_click_produto 
 	JOIN tb_produto ON fk_produto = tb_produto.id 
 	JOIN tb_categoria ON fk_categoria = tb_categoria.id;
---
-SELECT 
-	id, 
-    COUNT(dataClick) AS acessos, 
-    categoria 
-FROM vwcategoriasacessos 
-WHERE dataClick = '2024-04-01'
-GROUP BY categoria, id
-ORDER BY acessos DESC;
 
--- view corrigida
-create view  `vwprodutosmaisacessados` as
+-- View Produtos mais Acessados
+CREATE VIEW  `vwprodutosmaisacessados` AS
 SELECT 
     p.id AS id,
     p.qtd_estoque AS qtd,
@@ -376,22 +221,8 @@ SELECT
      LIMIT 1) AS url
 FROM tb_produto p
 JOIN tb_click_produto AS cp ON p.id = cp.fk_produto;
---
-SELECT
-	id,
-    qtd,
-    nome,
-    COUNT(dataClick) as acessos,
-    url
-FROM vwprodutosmaisacessados
-where dataClick = '2024-04-04'
-GROUP BY id, qtd, nome
-ORDER BY dataClick DESC
-LIMIT 7;
---
--- kpis
---
--- view corrigida
+
+-- View Faturamento
 CREATE VIEW `vwfaturamento` AS
 SELECT 
 	tb_produto.preco AS preco,
@@ -399,12 +230,8 @@ SELECT
 FROM tb_click_produto 
 JOIN tb_produto ON fk_produto = tb_produto.id
 WHERE possivel_compra = 0;
---
-SELECT 
-	SUM(preco) AS faturamento
-FROM vwfaturamento 
-WHERE dataClick BETWEEN DATE_SUB('2024-04-10', INTERVAL 7 DAY) AND '2024-04-10';
--- view corrigida
+
+-- View Últimos Acessos
 CREATE VIEW `vwacessossetedias` AS
 SELECT dataClick, id FROM (
 	SELECT
@@ -414,31 +241,34 @@ SELECT dataClick, id FROM (
 	FROM tb_click_produto WHERE possivel_compra = 0
 	GROUP BY possivel_compra, id
 ) AS viz;
---
-SELECT 
-	COUNT(dataClick) AS qtd,
-    id
-FROM vwacessossetedias 
-WHERE dataClick BETWEEN DATE_SUB('2024-09-28', INTERVAL 7 DAY) AND '2024-09-28'
-GROUP BY id;
--- view corrigida
+
+-- View Taxa de Retorno
 CREATE VIEW `vwtaxaretorno` AS
 SELECT 
 	tb_usuario.id AS id,
     tb_usuario.nome AS usuario,
-    DATE(tb_click_produto.data_hora_click) as dataClick
+    DATE(tb_click_produto.data_hora_click) AS dataClick
 FROM tb_click_produto
 	JOIN tb_usuario ON fk_usuario = tb_usuario.id;
---
-SELECT 
-	id, 
-    usuario, 
-    COUNT(dataClick) AS clicks 
-FROM vwtaxaretorno
-WHERE dataClick = '2024-04-01'
-GROUP BY id HAVING clicks > 1 
-ORDER BY clicks DESC;
+
+-- Selects ------------------------------------------------------------
+SELECT * FROM tb_usuario;
+SELECT * FROM tb_login;
+SELECT * FROM tb_produto;
+SELECT * FROM tb_click_produto;
+SELECT * FROM tb_imagem_produto;
+SELECT * FROM tb_tag_produto;
+SELECT * FROM tb_classificacao_produto;
+SELECT * FROM tb_favoritos;
+SELECT * FROM tb_imagem_produto;
+SELECT * FROM vwcategoriasacessos;
+SELECT * FROM vwprodutosmaisacessados;
+SELECT * FROM vwfaturamento;
+SELECT * FROM vwacessossetedias;
+SELECT * FROM vwtaxaretorno;
+
 -- Procedures ---------------------------------------------------------
+-- Procedure Remover Acentos
 DELIMITER //
 CREATE function `fnRemoveAccents`(`str` TEXT)
 	RETURNS text
