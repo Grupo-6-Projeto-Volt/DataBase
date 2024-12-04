@@ -453,8 +453,10 @@ INSERT INTO tb_imagem_produto (nome, codigo_imagem, indice_vt, fk_produto) VALUE
 ("images/Produtos/Produto24/teclado3.webp","https://bucket2-ichiban.s3.us-east-1.amazonaws.com/images/Produtos/Produto24/teclado3.webp",2,24);
 
 -- Inserts para tabela tb_click_produto
+
 -- INSERT INTO tb_click_produto (data_hora_click, possivel_compra, fk_usuario, fk_produto) VALUES
 -- ();
+
 
 -- Inserts para tabela tb_tag_produto
 INSERT INTO tb_tag_produto (tag) VALUES
@@ -509,6 +511,7 @@ INSERT INTO tb_classificacao_produto (fk_tag_produto, fk_produto) VALUES
 -- ();
 
 -- Views --------------------------------------------------------------
+
 -- View Acessos Categorias
 CREATE VIEW `vwcategoriasacessos` AS
 SELECT 
@@ -521,6 +524,7 @@ FROM tb_click_produto
 
 -- View Produtos mais Acessados
 CREATE VIEW  `vwprodutosmaisacessados` AS
+
 SELECT 
     p.id AS id,
     p.qtd_estoque AS qtd,
@@ -532,6 +536,7 @@ SELECT
      LIMIT 1) AS url
 FROM tb_produto p
 JOIN tb_click_produto AS cp ON p.id = cp.fk_produto;
+
 
 -- View Faturamento
 CREATE VIEW `vwfaturamento` AS
@@ -558,6 +563,7 @@ CREATE VIEW `vwtaxaretorno` AS
 SELECT 
 	tb_usuario.id AS id,
     tb_usuario.nome AS usuario,
+
     DATE(tb_click_produto.data_hora_click) AS dataClick
 FROM tb_click_produto
 	JOIN tb_usuario ON fk_usuario = tb_usuario.id;
